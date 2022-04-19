@@ -1,6 +1,0 @@
-{"method": "individual", "nr_classes": 5, "expand_neutral": false, "shift_neutral": "", "data_augmented": false, "descriptors": [], "class_balance": 0.0, "include_no_data": true, "strategy": "", "size": 25000}
-Negative,SlightlyNegative,Neutral,SlightlyPositive,Positive
-{"Negative": 0, "SlightlyNegative": 1, "Neutral": 2, "SlightlyPositive": 3, "Positive": 4}
-{"0": 3537, "1": 5560, "2": 5549, "3": 5125, "4": 5229}
-{"0": 1.0, "1": 1.5719536330223354, "2": 1.5688436528131184, "3": 1.4489680520214872, "4": 1.4783715012722647}
-{"img_agr": {"0": 0.61916}, "img_dis": {"0": 0.21744399999999997}, "avg_img_wkr_agr": {"0": 0.40862}, "avg_img_wkr_dis": {"0": 0.1078036}, "fless": {"0": 0.25657698539466955}, "cronbach": {"0": 0.8804053538309863}, "imgs": {"0": 5000}, "imgs_0": {"0": 679}, "imgs_1": {"0": 1124}, "imgs_2": {"0": 1131}, "imgs_3": {"0": 1101}, "imgs_4": {"0": 965}}
