@@ -1,0 +1,6 @@
+{"method": "individual", "cnn": "resnet", "nr_classes": 2, "expand_neutral": false, "shift_neutral": "positive", "data_augmented": false, "descriptors": ["age", "gs", "eco", "edu", "opt1", "neg1", "opt2", "reasons"], "class_balance": 0.0, "include_no_data": true, "strategy": "", "size": 25000}
+Negative,Other
+{"Negative": 0, "SlightlyNegative": 0, "Neutral": 1, "SlightlyPositive": 1, "Positive": 1}
+{"0": 9097, "1": 15903}
+{"0": 1.0, "1": 1.7481587336484556}
+{"img_agr": {"0": 0.85472}, "img_dis": {"0": 0.38161399999999995}, "avg_img_wkr_agr": {"0": 0.75572}, "avg_img_wkr_dis": {"0": 0.08285440000000001}, "fless": {"0": 0.47233209500122236}, "cronbach": {"0": 0.8174390769447661}, "imgs": {"0": 5000}, "imgs_0": {"0": 1803}, "imgs_1": {"0": 3197}}

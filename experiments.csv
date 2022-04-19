@@ -1,0 +1,2 @@
+id;cnn;nr_classes;expand_neutral;shift_neutral;method;data_augmented;metadata_descriptors;semantic_descriptors;dataset_strategy;dataset_size;class_balance;include_no_data
+3;resnet;2;;positive;individual;;True;True;;;0;True
