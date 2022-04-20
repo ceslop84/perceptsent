@@ -4,18 +4,6 @@ import json
 from random import shuffle
 import numpy as np
 import pandas as pd
-from copy import deepcopy
-
-def create_dir(dir):
-    if not os.path.isdir(dir):
-            try:
-                os.mkdir(dir)
-                return dir
-            except Exception as e:
-                print(f"Creation of directory {dir} failed: {e}")
-                exit(1)
-    else:
-        return dir
 
 class Dataset():
         
@@ -319,7 +307,7 @@ class Dataset():
             return classes_dict, classes_list
     
         num_seq = int(cfg[0])
-        cnn = cfg[1]
+        model = cfg[1]
         nr_classes = int(cfg[2])
         expand_neutral = (cfg[3]=="True")
         shift_neutral = str(cfg[4])
@@ -335,8 +323,9 @@ class Dataset():
         class_balance = float(cfg[11].replace(",","."))
         include_no_data = (cfg[12]=="True")
         
-        self.dataset = dataset
-        self.cnn = cnn
+
+        self.dataset_json = f"{dataset}/dataset.json"
+        self.model = model
         self.num_seq = num_seq
         self.method = method
         self.nr_classes = nr_classes
@@ -355,23 +344,35 @@ class Dataset():
         self.size = size
         self.profiling = profiling
 
-        descriptors = list()
+        attributes = list()
         if metadata:
-            descriptors += ["age", "gs", "eco", "edu", "opt1", "neg1", "opt2"]
+            attributes += ["age", "gs", "eco", "edu", "opt1", "neg1", "opt2"]
         if semantic:
-            descriptors += ["reasons"]
-        self.descriptors = descriptors
+            attributes += ["reasons"]
+        self.attributes = attributes
 
         self.data = None
         self.imgs_list = list()
         self.imgs_agg = list()
         self.img_df = None
         
-        create_dir(f"{output}")
-        create_dir(f"{output}/{self.num_seq}")
-        self.output = create_dir(f"{output}/{self.num_seq}/dataset")
-        if self.descriptors:
-            create_dir(f"{output}/{self.num_seq}/dataset/descriptors")
+        self.create_dir(f"{output}")
+        self.output_folder = self.create_dir(f"{output}/{self.num_seq}")
+        self.dataset_folder = self.create_dir(f"{output}/{self.num_seq}/dataset")
+        if self.attributes:
+            self.create_dir(f"{output}/{self.num_seq}/dataset/descriptors")
+
+        # Check the folder to retrieve the images.
+        if self.method == "individual":
+            self.images = f"{dataset}/images/individual/original"
+        else:
+            self.images = f"{dataset}/images/dominant/original"
+        
+        # Check if data is augmented.
+        if self.data_augmented:
+            self.images_data_augmented = f"{dataset}/images/individual/data_augmented"
+        else:
+            self.images_data_augmented = None
 
     def create(self):
   
@@ -383,6 +384,17 @@ class Dataset():
         self.__save_list()
         self.__save_descriptors()
         self.__export_data()  
+
+    def create_dir(self, dir):
+        if not os.path.isdir(dir):
+                try:
+                    os.mkdir(dir)
+                    return dir
+                except Exception as e:
+                    print(f"Creation of directory {dir} failed: {e}")
+                    exit(1)
+        else:
+            return dir
 
     def __calculate_class_balance(self):
 
@@ -430,12 +442,12 @@ class Dataset():
     def __to_dict(self):
         cfg = dict()
         cfg["method"] = self.method
-        cfg["cnn"] = self.cnn
+        cfg["cnn"] = self.model
         cfg["nr_classes"] = self.nr_classes
         cfg["expand_neutral"] = self.expand_neutral
         cfg["shift_neutral"] = self.shift_neutral
         cfg["data_augmented"] = self.data_augmented
-        cfg["descriptors"] = self.descriptors
+        cfg["descriptors"] = self.attributes
         cfg["class_balance"] = self.class_balance
         cfg["include_no_data"] = self.include_no_data
         cfg["strategy"] = self.strategy
@@ -483,19 +495,22 @@ class Dataset():
                             }
 
 
-        tasks = read_data(self.dataset)
+        tasks = read_data(self.dataset_json)
         workers_info = get_workers_info(tasks)
         imgs = list()
 
         informations = self.codes
         desc_template = list()
-        for i, desc_label in enumerate(self.descriptors):
+        n_atts = 0
+        for i, desc_label in enumerate(self.attributes):
             desc = informations.get(desc_label)
             class_max = max(desc, key=desc.get)
             tam = desc.get(class_max)
             desc_list = [0] * (tam+1)
+            n_atts += len(desc_list)
             desc_template.append(desc_list)
-        
+        self.n_atts = n_atts
+
         for assgn in tasks:
             image_resps = assgn.get('image_resps')  
             for image in image_resps:
@@ -505,10 +520,10 @@ class Dataset():
                 sent.append(assgn.get('assignment_id'))
                 sent.append(self.classes_dict.get(image.get('sentiment')))
 
-                if self.descriptors:
+                if self.attributes:
                     no_data, info_resp = get_info_resp(assgn, image, workers_info)
                     if not no_data or (self.include_no_data and no_data):                      
-                        for desc_label in self.descriptors:
+                        for desc_label in self.attributes:
                             desc = informations.get(desc_label)
                             class_max = max(desc, key=desc.get)
                             tam = desc.get(class_max)
@@ -815,7 +830,7 @@ class Dataset():
             df_list = img_agr_dataset(img_stat_df)
         
         if self.profiling:
-            build_metrics_profile(df_list, self.nr_classes, f"{self.output}/profiling.csv")
+            build_metrics_profile(df_list, self.nr_classes, f"{self.dataset_folder}/profiling.csv")
             
         df_list_head = list()
         for c in range(self.nr_classes):
@@ -882,7 +897,7 @@ class Dataset():
     def __report(self):
         balance_count, balance_perc, _ = self.__calculate_class_balance()  
         metrics = self.__build_metrics()
-        with open(f"{self.output}/metadata.txt", 'w') as f:
+        with open(f"{self.dataset_folder}/metadata.txt", 'w') as f:
             f.write(f"{json.dumps(self.__to_dict())}")
             f.write("\n")
             f.write(f"{','.join(self.classes_list)}")
@@ -894,7 +909,7 @@ class Dataset():
             f.write(f"{json.dumps(balance_perc)}")
             f.write("\n")
             f.write(f"{json.dumps(metrics)}")
-        with open(f"{self.output}/report.txt", 'w') as f:
+        with open(f"{self.dataset_folder}/report.txt", 'w') as f:
             f.write(f"Configuration: {json.dumps(self.__to_dict(), indent=2, default=str)}")
             f.write("\n\n")
             f.write(f"Classes (out): {json.dumps(self.classes_list, indent=2, default=str)}")
@@ -930,17 +945,20 @@ class Dataset():
                     index = names.index(img[0])
                     workers[index] += f" {img[1]} {str(img[2])}"
 
-            with open(f"{self.output}/data.txt", 'w') as f:
+            with open(f"{self.dataset_folder}/data.txt", 'w') as f:
                 for img in zip(names, workers):
                     f.write(f"{img[0]} {img[1]}\n")
         else:
-            with open(f"{self.output}/data.txt", 'w') as f:
+            with open(f"{self.dataset_folder}/data.txt", 'w') as f:
                 for img in self.imgs_agg:
                     f.write(f"{img[0]} {str(img[2])}\n")
+        
+        self.data_file = f"{self.dataset_folder}/data.txt"
 
     def __save_descriptors(self):
         
-        if not self.descriptors:
+        if not self.attributes:
+            self.attributes = None
             return None
 
      
@@ -985,11 +1003,12 @@ class Dataset():
         
 
         for file_name, content in zip(file_list, desc_content):
-            np.savetxt(f"{self.output}/descriptors/{file_name}", np.asarray(content, dtype="float32")) 
+            np.savetxt(f"{self.dataset_folder}/descriptors/{file_name}", np.asarray(content, dtype="float32")) 
+        self.attributes = f"{self.dataset_folder}/descriptors"
 
     def __export_data(self):
         
-        with open(self.dataset, 'r') as j:
+        with open(self.dataset_json, 'r') as j:
             json_data = json.load(j)
 
         info_cd = self.codes
@@ -1082,23 +1101,23 @@ class Dataset():
             for r in dd[13].split(','):
                 data_cd_t.append([f"{dd[1]}_{dd[2]}", r, "reasons"])
         
-        with open(f'{self.output}/raw_label_t.csv', 'w') as f:
+        with open(f'{self.dataset_folder}/raw_label_t.csv', 'w') as f:
             write = csv.writer(f, delimiter=';')
             for i in data_lb_t:
                 write.writerow(i)
         
-        with open(f'{self.output}/raw_code_t.csv', 'w') as f:
+        with open(f'{self.dataset_folder}/raw_code_t.csv', 'w') as f:
             write = csv.writer(f, delimiter=';')
             for i in data_cd_t:
                 write.writerow(i)
 
 
-        with open(f'{self.output}/raw_label.csv', 'w') as f:
+        with open(f'{self.dataset_folder}/raw_label.csv', 'w') as f:
             write = csv.writer(f, delimiter=';')
             for i in data_lb:
                 write.writerow(i)
 
-        with open(f'{self.output}/raw_code.csv', 'w') as f:
+        with open(f'{self.dataset_folder}/raw_code.csv', 'w') as f:
             write = csv.writer(f, delimiter=';')
             for i in data_cd:
                 write.writerow(i)

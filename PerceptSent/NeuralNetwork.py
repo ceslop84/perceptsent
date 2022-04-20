@@ -1,5 +1,5 @@
-import cv2
 import os
+import cv2
 import pandas as pd
 import numpy as np
 
@@ -31,7 +31,7 @@ class DataGenerator(Sequence):
                  batch_size=BATCH_SIZE,
                  shuffle=True,
                  permutation=None,
-                 n_classes=3):
+                 nr_classes=3):
 
         self.img_files = img_files
         self.att_dir = att_dir
@@ -40,8 +40,8 @@ class DataGenerator(Sequence):
         self.shuffle = shuffle
         self.permutation = permutation
         self.labels = labels
-        self.n_classes = n_classes
-        self.on_epoch_end()
+        self.nr_classes = nr_classes
+        self.__on_epoch_end()
 
     def __len__(self):
         return int((len(self.img_files)-1)/self.batch_size+1)
@@ -60,12 +60,12 @@ class DataGenerator(Sequence):
             X = self.__data_generation(img_files_temp)
             return X
 
-    def on_epoch_end(self):
+    def __on_epoch_end(self):
         self.indexes = np.arange(len(self.img_files))
         if self.shuffle:
             np.random.shuffle(self.indexes)
 
-    def crop_resize(self, img_file):
+    def __crop_resize(self, img_file):
         img = cv2.imread(img_file, cv2.IMREAD_COLOR)
         y, x, c = img.shape
         if y < x:
@@ -86,7 +86,7 @@ class DataGenerator(Sequence):
             labels_temp = [[None]*element_size for _ in range(len(img_files_temp))]
         
         for img, label in zip(img_files_temp, labels_temp):
-            img_data = self.crop_resize(img)
+            img_data = self.__crop_resize(img)
             X_img.append(img_data)
             if self.att_dir is not None:
                 img_name = ((img.split('/')[-1]).split('.')[0])
@@ -106,102 +106,80 @@ class DataGenerator(Sequence):
         if self.labels is None:
             return X
         else:
-            return X, to_categorical(Y, num_classes=self.n_classes)
+            return X, to_categorical(Y, num_classes=self.nr_classes)
 
-class OutdoorSent:
+class NeuralNetwork:
 
     __known_models = ['none', 'inception', 'resnet', 'vgg',
                       'xception', 'densenet', 'robust']
 
-    def __init__(self, model, attributes=None, n_atts=102, n_classes=3, freeze=False, early_stop=False, classes=None, data_augmented=False, output_folder="output", h5_file=None):
-        
-        self.__set_classes(n_classes, classes)
-        
-        self.n_atts = n_atts
-        if n_atts == 0:
-            attributes = None
+    def __init__(self, dataset, freeze=False, early_stop=False, h5_file=None):   
         self.freeze = freeze
         self.early_stop = early_stop
-        self.data_augmented = data_augmented
-        self.output_folder = output_folder
-        self.create_dir(self.output_folder)
-        assert(model in self.__known_models)
-        self.model_name = model
-        self.attributes = attributes
-        self.__set_size()
-        self.model = self.load_model()
+        self.dataset = dataset
+        self.results_folder = dataset.create_dir(f"{dataset.output_folder}/results")
+        assert(dataset.model in self.__known_models)
+        self.model_name = dataset.model
+        if self.model_name == 'inception':
+            self.img_size = 299
+        else:
+            self.img_size = 224
+        self.model = self.__load_model()
         if h5_file:
             # Load trained model.
             self.model.load_weights(h5_file)
         self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-    def normalize(self, descriptor, images):
-        desc_list = list()
-        name_list = list()
-        with open(images) as f:
-            for line in f:
-                img_name = (line.split('/')[-1]).rsplit('.', 1)[-2]
-                name_list.append(img_name)
-                desc_list.append(np.loadtxt(f"{descriptor}/{img_name}.txt"))
-        desc_np = np.asarray(desc_list)
-        min_max_scaler = MinMaxScaler()
-        desc_norm = min_max_scaler.fit_transform(desc_np)
-        os.mkdir(f"{descriptor}_norm")
-        for i, data in enumerate(desc_norm):
-            output_file = f"{descriptor}_norm/{name_list[i]}.txt"
-            np.savetxt(output_file, data)
+    def __load_model(self):
 
-    def __set_size(self):
-        if self.model_name == 'inception':
-            self.img_size = 299
-        else:
-            self.img_size = 224
-
-    def __set_classes(self, n_classes, classes):
-        if n_classes not in [2,3,5,6]:
-            raise Exception(f"Can't predict {n_classes} classes")
-
-        if classes:
-            if n_classes == len(classes):
-                self.n_classes = n_classes
-                self.classes=classes
+        def add_dense_layers(network, input_tensor, x=None):
+            if network.model_name != 'none':
+                if network.dataset.attributes is not None:
+                        att_tensor = layers.Input(shape=(network.dataset.n_atts,), name='attributes')
+                        x = layers.Concatenate()([x, att_tensor])
             else:
-                raise Exception("The number of classes doesn't match the count in the classes label's list.")
-        else:
-            raise Exception("Please inform the classes descriptions")
+                if network.dataset.attributes is not None:
+                        att_tensor = layers.Input(shape=(network.dataset.n_atts,), name='attributes')
+                        x = att_tensor
+            x = layers.Dense(2048, activation='relu')(x)
+            x = layers.Dropout(rate=0.2)(x)
+            x = layers.Dense(1024, activation='relu')(x)
+            x = layers.Dropout(rate=0.2)(x)
+            x = layers.Dense(24, activation='relu')(x)
+            x = layers.Dense(network.dataset.nr_classes, activation='softmax')(x)
 
-    def add_dense_layers(self, input_tensor, x=None):
-        if self.model_name != 'none':
-            if self.attributes is not None:
-                    att_tensor = layers.Input(shape=(self.n_atts,), name='attributes')
-                    x = layers.Concatenate()([x, att_tensor])
-        else:
-            if self.attributes is not None:
-                    att_tensor = layers.Input(shape=(self.n_atts,), name='attributes')
-                    x = att_tensor
-        x = layers.Dense(2048, activation='relu')(x)
-        x = layers.Dropout(rate=0.2)(x)
-        x = layers.Dense(1024, activation='relu')(x)
-        x = layers.Dropout(rate=0.2)(x)
-        x = layers.Dense(24, activation='relu')(x)
-        x = layers.Dense(self.n_classes, activation='softmax')(x)
+            if network.dataset.attributes is not None:
+                model = Model(inputs=[input_tensor, att_tensor], outputs=x)
+            else:
+                model = Model(inputs=[input_tensor], outputs=x)
+            return model
 
-        if self.attributes is not None:
-            model = Model(inputs=[input_tensor, att_tensor], outputs=x)
-        else:
-            model = Model(inputs=[input_tensor], outputs=x)
-        return model
+        def robust_model(input_tensor):
+            # Robust Image Sentiment Analysis Using
+            #  Progressively Trained and Domain Transferred Deep Networks
+            # https://arxiv.org/abs/1509.06041
+            x = layers.Conv2D(filters=96,
+                            kernel_size=(11,11),
+                            strides=4,
+                            activation='relu')(input_tensor)
+            x = layers.Lambda(lambda a: tf.nn.lrn(input=a))(x)
+            x = layers.MaxPooling2D(pool_size=(3, 3), strides=2)(x)
 
-    def save_model(self, file_name):
-        with open(file_name, 'a+') as f:
-            self.model.summary(print_fn=lambda x: f.write(x + '\n'))
+            x = layers.Conv2D(filters=256,
+                                kernel_size=(5, 5),
+                                strides=2,
+                                activation='relu',
+                                name = "conv2d_last")(x)
+            x = layers.Lambda(lambda a: tf.nn.lrn(input=a))(x)
+            x = layers.MaxPooling2D(name="max_pooling2d_lcl1", pool_size=(6, 6), strides=6)(x)
 
-    def load_model(self):
+            return Model(inputs=input_tensor, outputs=x)
+
         input_tensor = layers.Input(shape=(self.img_size, self.img_size, 3), name='images')
 
         if self.model_name == 'robust':
             last_conv_layer_name = "conv2d_last"
-            base_model = self.robust_model(input_tensor)
+            base_model = robust_model(input_tensor)
         elif self.model_name == 'vgg':
             # Very Deep Convolutional Networks
             #  for Large-Scale Image Recognition
@@ -270,75 +248,53 @@ class OutdoorSent:
                 x = layers.Flatten(name="flatten")(next_layer)
                 self.classifier_layer_names = ["flatten"]
 
-            model = self.add_dense_layers(input_tensor, x)
+            model = add_dense_layers(self, input_tensor, x)
         else:
-            model = self.add_dense_layers(input_tensor)
+            model = add_dense_layers(self, input_tensor)
         
         return model
 
-    def create_dir(self, dir):
-        if not os.path.isdir(dir):
-                try:
-                    os.mkdir(dir)
-                except:
-                    print(f"Creation of directory {dir} failed!")
-                    exit(1)
+    def load_dataset(self, classify=False):
 
-    def robust_model(self, input_tensor):
-            # Robust Image Sentiment Analysis Using
-            #  Progressively Trained and Domain Transferred Deep Networks
-            # https://arxiv.org/abs/1509.06041
-        x = layers.Conv2D(filters=96,
-                          kernel_size=(11,11),
-                          strides=4,
-                          activation='relu')(input_tensor)
-        x = layers.Lambda(lambda a: tf.nn.lrn(input=a))(x)
-        x = layers.MaxPooling2D(pool_size=(3, 3), strides=2)(x)
-
-        x = layers.Conv2D(filters=256,
-                            kernel_size=(5, 5),
-                            strides=2,
-                            activation='relu',
-                            name = "conv2d_last")(x)
-        x = layers.Lambda(lambda a: tf.nn.lrn(input=a))(x)
-        x = layers.MaxPooling2D(name="max_pooling2d_lcl1", pool_size=(6, 6), strides=6)(x)
-
-        return Model(inputs=input_tensor, outputs=x)
-
-    def load_dataset(self, image_list, folder=None, folder_data_augmented=None, classify=False):
-
-        if not folder:
+        if not self.dataset.images:
             raise Exception("Image folder not informed.")         
 
         if classify:
             raise Exception("Not implemented")
-        else:
-            X_imgs = list()
-            Y_labels = list()
-            assert(os.path.isfile(image_list))
-            with open(image_list) as f:
-                for line in f:
-                    img_data = line.replace("\n","").split(" ")
-                    imgs = list()
-                    labels = list()
-                    if len(img_data) == 2:
-                        imgs.append([folder, folder_data_augmented, img_data[0]])
-                        labels.append(int(img_data[1]))
-                    elif len(img_data) == 11:
-                        #imgs.append([folder, folder_data_augmented, f"{img_data[0]}"])
-                        for i in range (1,10,2):
-                            imgs.append([folder, folder_data_augmented, f"{img_data[0]}_{img_data[i]}"])
-                            labels.append(int(img_data[i+1]))
-                    else: 
-                        raise Exception("Erro while reading image data from dataset.")
-                    X_imgs.append(imgs)
-                    Y_labels.append(labels)
-            return np.asarray(X_imgs), np.asarray(Y_labels)
+        
+        X_imgs = list()
+        Y_labels = list()
+        assert(os.path.isfile(self.dataset.data_file))
+        with open(self.dataset.data_file) as f:
+            for line in f:
+                img_data = line.replace("\n","").split(" ")
+                imgs = list()
+                labels = list()
+                if len(img_data) == 2:
+                    imgs.append([self.dataset.images, self.dataset.images_data_augmented, img_data[0]])
+                    labels.append(int(img_data[1]))
+                elif len(img_data) == 11:
+                    for i in range (1,10,2):
+                        imgs.append([self.dataset.images, self.dataset.images_data_augmented, f"{img_data[0]}_{img_data[i]}"])
+                        labels.append(int(img_data[i+1]))
+                else: 
+                    raise Exception("Erro while reading image data from dataset.")
+                X_imgs.append(imgs)
+                Y_labels.append(labels)
+        X = np.asarray(X_imgs)
+        Y = np.asarray(Y_labels)
+        self.__unpack(X, Y, "imgs")
+        return X, Y
 
-    def train_model(self, X_imgs, Y_labels, epochs=20, validation_split=0.25, k=5):
-        w_folder = f"{self.output_folder}/Weights"
-        self.create_dir(w_folder)
-        self.save_model(f"{self.output_folder}/model.txt")
+    def train_model(self, X_imgs, Y_labels, epochs=20, k=5):
+
+        def save_model(file_name):
+            with open(file_name, 'a+') as f:
+                self.model.summary(print_fn=lambda x: f.write(x + '\n'))
+
+        w_folder = f"{self.results_folder}/Weights"
+        self.dataset.create_dir(w_folder)
+        save_model(f"{self.results_folder}/model.txt")
         assert(k > 0 and k < 10)
         y = [sum(y) for y in Y_labels]
         if k > 1:
@@ -364,18 +320,7 @@ class OutdoorSent:
             self.__fit_model(X_train, Y_train, epochs=epochs, early_stop=self.early_stop, w_folder=w_folder, name=f"{k}_1")
             self.classify(X_val, Y_val, f"{k}_1")                
 
-    def __weights(self, y):
-        c = np.zeros(self.n_classes)
-        for i in range(self.n_classes):
-            c[i] = np.sum(np.where(y==i, 1., 0.))
-
-        class_weight = {}
-        for i in range(self.n_classes):
-            class_weight[i] = min(c)/c[i]
-        print('Class Weights:', class_weight)
-        return class_weight
-
-    def unpack(self, X, Y, data_augmented, file_name=None, classify=False):
+    def __unpack(self, X, Y, file_name=None, classify=False):
         XY = list()
 
         for imgs, labels in zip(X, Y):
@@ -387,7 +332,7 @@ class OutdoorSent:
                     XY.append([img_path, int(label)])
             else:
                 for img, label in zip(imgs, labels):
-                    if data_augmented:
+                    if self.dataset.data_augmented:
                         img_path = f"{img[1]}/{img[2]}"
                     else:
                         img_path = f"{img[0]}/{img[2]}"
@@ -395,42 +340,53 @@ class OutdoorSent:
                         img_path = f"{img_path}.jpg"
                     XY.append([img_path, int(label)])
         if file_name:
-            with open(f"{self.output_folder}/{file_name}.txt", 'w') as f:
+            with open(f"{self.results_folder}/{file_name}.txt", 'w') as f:
                 for x, y in XY:
                     f.write(f"{str(x)} {str(y)}\n")
         X_imgs = list()
         Y_labels = list()
-        # XY = shuffle(XY)
         for x, y in XY:
             X_imgs.append(x)
             Y_labels.append(y)        
         return X_imgs, Y_labels
 
-    def __fit_model(self, X_imgs, Y_labels, epochs=20, early_stop=False, test_size=0.25, w_folder="output/Weights", name="model"):
+    def __fit_model(self, X_imgs, Y_labels, epochs=20, early_stop=False, w_folder="output/Weights", name="model"):
 
 
-        def __lr_scheduler(self, epoch):
+        def lr_scheduler(self, epoch):
             if epoch >= 0.7*epochs:
                 return 1e-6
             elif epoch >= 0.4*epochs:
                 return 1e-5
             else:
                 return 1e-4
+
+        def weights(y):
+            c = np.zeros(self.dataset.nr_classes)
+            for i in range(self.dataset.nr_classes):
+                c[i] = np.sum(np.where(y==i, 1., 0.))
+
+            class_weight = {}
+            for i in range(self.dataset.nr_classes):
+                class_weight[i] = min(c)/c[i]
+            print('Class Weights:', class_weight)
+            return class_weight
+
         y = [sum(y) for y in Y_labels]
-        X_train, X_val, Y_train, Y_val = train_test_split(X_imgs, Y_labels, stratify = y, test_size = test_size, random_state = 42)
-        Xt, Yt = self.unpack(X_train, Y_train, self.data_augmented, f"imgs_train_{name}")
-        Xv, Yv = self.unpack(X_val, Y_val, self.data_augmented, f"imgs_val_{name}")
-        class_weight = self.__weights(np.asarray(Yt))
+        X_train, X_val, Y_train, Y_val = train_test_split(X_imgs, Y_labels, stratify = y, test_size = 0.2, random_state = 42)
+        Xt, Yt = self.__unpack(X_train, Y_train, f"imgs_train_{name}")
+        Xv, Yv = self.__unpack(X_val, Y_val, f"imgs_val_{name}")
+        class_weight = weights(np.asarray(Yt))
         train_datagen = DataGenerator(Xt, Yt,
-                                      att_dir = self.attributes,
+                                      att_dir = self.dataset.attributes,
                                       img_size = self.img_size,
                                       batch_size = BATCH_SIZE,
-                                      n_classes=self.n_classes)
+                                      nr_classes=self.dataset.nr_classes)
         val_datagen = DataGenerator(Xv, Yv,
-                                    att_dir = self.attributes,
+                                    att_dir = self.dataset.attributes,
                                     img_size = self.img_size,
                                     batch_size = BATCH_SIZE,                                    
-                                    n_classes=self.n_classes)
+                                    nr_classes=self.dataset.nr_classes)
 
         h5_file = f'{w_folder}/weights_{name}.h5'
 
@@ -442,7 +398,7 @@ class OutdoorSent:
                                      save_freq = "epoch",
                                      mode = 'max'
                                     )
-        lr_decay = LearningRateScheduler(__lr_scheduler)
+        lr_decay = LearningRateScheduler(lr_scheduler)
 
         history_logger=tf.keras.callbacks.CSVLogger(f"{w_folder}/history_{name}.csv", separator=",", append=True)
 
@@ -466,21 +422,21 @@ class OutdoorSent:
     def classify(self, X_imgs, Y_labels, name="classify", unpack=True, permutation=None):
         
         if unpack:
-            imgs, y_true = self.unpack(X_imgs, Y_labels, False, name, True)
+            imgs, y_true = self.__unpack(X_imgs, Y_labels, name, True)
         else:
             imgs = X_imgs
             y_true = Y_labels
         test_datagen = DataGenerator(imgs, None,
-                                     att_dir = self.attributes,
+                                     att_dir = self.dataset.attributes,
                                      img_size = self.img_size,
                                      batch_size = 1,
                                      shuffle = False,
                                      permutation=permutation,
-                                     n_classes=self.n_classes)
+                                     nr_classes=self.dataset.nr_classes)
         pred = self.model.predict(test_datagen, verbose=VERBOSE)
         y_pred = np.argmax(pred, axis = 1)
         if y_true is not None:
-            with open(f"{self.output_folder}/test_{name}.txt", 'a+') as f:
+            with open(f"{self.results_folder}/test_{name}.txt", 'a+') as f:
                 f.write(str(classification_report(y_true, y_pred)))
                 f.write("\n")
                 f.write(str(accuracy_score(y_true, y_pred)))
@@ -490,6 +446,6 @@ class OutdoorSent:
                 result = list()
                 f.write("image, value, true_label, predict_label\n")
                 for img, p, c, t in zip(imgs, pred, y_pred, y_true):
-                    f.write(f"{img}, {p}, {self.classes[t]}, {self.classes[c]}\n")
-                    result.append([img, p[0], p[1], self.classes[t], self.classes[c]])
+                    f.write(f"{img}, {p}, {self.dataset.classes_list[t]}, {self.dataset.classes_list[c]}\n")
+                    result.append([img, p[0], p[1], self.dataset.classes_list[t], self.dataset.classes_list[c]])
         return pred, result

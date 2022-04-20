@@ -130,3 +130,5 @@ dmypy.json
 
 # Custom PerceptSent
 /output
+/PerceptSent/data/images/dominant/data_augmented
+/PerceptSent/data/images/individual/data_augmented
