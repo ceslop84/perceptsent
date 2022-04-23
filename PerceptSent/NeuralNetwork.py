@@ -264,8 +264,8 @@ class NeuralNetwork:
         
         X_imgs = list()
         Y_labels = list()
-        assert(os.path.isfile(self.dataset.data_file))
-        with open(self.dataset.data_file) as f:
+        assert(os.path.isfile(self.dataset.dataset_file))
+        with open(self.dataset.dataset_file) as f:
             for line in f:
                 img_data = line.replace("\n","").split(" ")
                 imgs = list()

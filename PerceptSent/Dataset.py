@@ -28,7 +28,7 @@ class Dataset():
         def create_coded_informations():
 
             age = {
-                'noage': 0,
+                'no_age': 0,
                 '19_25': 1, 
                 '18_25': 1,
                 '26_35': 2, 
@@ -36,12 +36,12 @@ class Dataset():
                 'over45': 4, 
                 }
 
-            gs = {'nogender': 0, 'female': 1, 'male': 2}
+            gs = {'no_gender': 0, 'female': 1, 'male': 2}
 
-            eco = {'noeco': 0, 'noedu': 0, 'low': 1, 'middle': 2,  'high': 3}
+            eco = {'no_eco': 0, 'low': 1, 'middle': 2,  'high': 3}
 
             edu = {
-                'noedu': 0, 
+                'no_edu': 0, 
                 'lesssec': 1, 'ttv_edu': 1, 'sec_edu': 1, 
                 'Bachelor’s degree': 2, 'bac_edu': 2,
                 'Postgraduate': 3,  'pos_edu': 3
@@ -282,24 +282,13 @@ class Dataset():
 
         def create_label_informations():
 
-            age = {
-                0: 'no_age',
-                1: '19_25',
-                2: '26_35',
-                3: '36_45', 
-                4: 'over45' 
-                }
+            age = {0: 'no_age', 1: '19_25', 2: '26_35', 3: '36_45', 4: 'over45'}
 
             gs = {0: 'no_gender', 1: 'female', 2: 'male'}
 
             eco = {0: 'no_eco', 1: 'low', 2: 'middle', 3: 'high'}
 
-            edu = {
-                0: 'no_edu', 
-                1: 'sec_edu', 
-                2: 'bac_edu',
-                3: 'pos_edu'
-                }
+            edu = {0: 'no_edu', 1: 'sec_edu', 2: 'bac_edu',3: 'pos_edu'}
 
             opt1 = {
                 0: 'no_opt1',
@@ -816,10 +805,10 @@ class Dataset():
                 return data
             else:
                 return {
-                        "age": "noage",
-                        "gs": "nogender",
-                        "eco": "noeco",
-                        "edu": "noedu",
+                        "age": "no_age",
+                        "gs": "no_gender",
+                        "eco": "no_eco",
+                        "edu": "no_edu",
                         "opt1": "no_opt1",
                         "neg1": "no_neg1",
                         "opt2": "no_opt2",
@@ -854,8 +843,7 @@ class Dataset():
                 if self.attributes:
                     info_resp = get_info_resp(assgn, image, workers_info)
                 
-                att = dict()
-                desc_metadata = list()    
+                att = dict()  
                 for desc_label in self.attributes:
                     cat = None
                     cat_id = None
@@ -866,7 +854,11 @@ class Dataset():
                         cat = info_resp.get(desc_label)
                         cat_id = informations.get(desc_label).get(cat)
                         desc_list[cat_id]+=1
-                        desc_metadata += desc_list
+                        if att.get("metadata", None):
+                            att["metadata"][desc_label] = desc_list
+                        else:
+                            att["metadata"] = dict()
+                            att["metadata"][desc_label] = desc_list
                     elif desc_label == "perceptions":
                         for cat in image.get(desc_label, []):
                             cat_id = informations[desc_label].get(cat, -1)
@@ -888,9 +880,7 @@ class Dataset():
                         att["objects"] = desc_list
                     else:
                         raise Exception("Unknown attribute!")
-
-                if desc_metadata:
-                    att["metadata"] = desc_metadata
+                
                 record.append(att)
                 imgs.append(record)    
 
@@ -1338,7 +1328,10 @@ class Dataset():
                 img_name = img[0]
             
             atts = img[3]
-            img_m = atts.get("metadata", [])
+            img_m = list()
+            img_m_dict = atts.get("metadata", dict())
+            for m in img_m_dict.values():
+                img_m += m
             img_p = atts.get("perceptions", [])
             img_o = atts.get("objects", [])
             img_pa = perc_agg_temp[imgs_agg_temp.index(img[0])]
@@ -1381,99 +1374,105 @@ class Dataset():
         self.attributes = f"{self.dataset_folder}/descriptors"
 
     def __export_data(self):
-        
-        with open(self.dataset_json, 'r') as j:
-            json_data = json.load(j)
 
-        info_cd = self.codes
-        info_lb = self.labels
+        def get_value(dict_values, list_choice):
+            for index, c in enumerate(list_choice):
+                if c == 1:
+                    return dict_values.get(index)
+
+        headers = ["image", "worker", "sentiment", "age", "gs", "eco", "edu", "opt1", "neg1", "opt2", "perceptions", "objects"]
         data_lb = list()
         data_cd = list()
-        headers = ["worker", "assignment", "img", "sentiment", "in_out_door", "age", "gs", "eco", "edu", "opt1", "neg1", "opt2", "comments", "perceptions"]
         data_lb.append(headers)
         data_cd.append(headers)
         
-        workers = dict()
-        for assig in json_data["tasks"]:
-            worker = assig["worker_id"]
-            if not workers.get(worker, None):
-                workers[worker] = assig["info_resp"]
-        
-        for assig in json_data["tasks"]:
-            resp = workers.get(assig["worker_id"])
-            if resp is None:
-                resp = dict()
-                resp["age"] = "noage"
-                resp["gs"] = "nogender"
-                resp["eco"] = "noeco"
-                resp["edu"] = "noedu"
-                resp["opt1"] = "no"
-                resp["neg1"] = "no"
-                resp["opt2"] = "no"
+        for img in self.data:
 
-            for img in assig["image_resps"]:
+            img_id = img[0]
+            wkr_id = img[1]
+            sent_cd = img[2]
+            sent_lb = self.classes_list[sent_cd]  
+            perceptions_cd = list()
+            perceptions_lb = list()
+            p_labels = self.labels.get("perceptions", dict())
+            for index, p in enumerate(img[3].get("perceptions", [])):
+                if p:
+                    perceptions_cd.append(index)
+                    perceptions_lb.append(p_labels.get(index, ""))
 
-                comments = list()
-                perceptions_cd = [0] * 37
-                perceptions_lb = list()
-                for r in img["perceptions"]:
-                    r_id = info_cd["perceptions"].get(r, -1)
-                    if r_id >0:
-                        perceptions_lb.append(r)
-                        perceptions_cd[r_id]+=1
-                    else:
-                        r.replace(",", "")
-                        comments.append(r)
+            objects_cd = list()
+            objects_lb = list()
+            o_labels = self.labels.get("objects", dict())
+            for index, o in enumerate(img[3].get("objects", [])):
+                if o:
+                    objects_cd.append(index)
+                    objects_lb.append(o_labels.get(index, ""))
+                    
+            metadata = img[3].get("metadata", None)
+            if metadata:
+                age_lb = get_value(self.labels["age"], metadata["age"])
+                gs_lb = get_value(self.labels["gs"], metadata["gs"])
+                eco_lb = get_value(self.labels["eco"], metadata["eco"])
+                edu_lb = get_value(self.labels["edu"], metadata["edu"])
+                opt1_lb = get_value(self.labels["opt1"], metadata["opt1"])
+                neg1_lb = get_value(self.labels["neg1"], metadata["neg1"])
+                opt2_lb = get_value(self.labels["opt2"], metadata["opt2"])
 
-                worker_id = assig["worker_id"]
-                assig_id= assig["assignment_id"]
-                img_id = img["id"]
+                age_cd = self.codes["age"].get(age_lb)
+                gs_cd = self.codes["gs"].get(gs_lb)
+                eco_cd = self.codes["eco"].get(eco_lb)
+                edu_cd = self.codes["edu"].get(edu_lb)
+                opt1_cd = self.codes["opt1"].get(opt1_lb)
+                neg1_cd = self.codes["neg1"].get(neg1_lb)
+                opt2_cd = self.codes["opt2"].get(opt2_lb)
 
-                sent_cd = self.classes_dict.get(img["sentiment"])                      
-                in_out_door_cd = info_cd["in_out_door"].get(img["in_out_door"])
-                age_cd = info_cd["age"].get(resp["age"])
-                gs_cd = info_cd["gs"].get(resp["gs"])
-                eco_cd = info_cd["eco"].get(resp["eco"])
-                edu_cd = info_cd["edu"].get(resp["edu"])
-                opt1_cd = info_cd["opt1"].get(resp["opt1"])
-                neg1_cd = info_cd["neg1"].get(resp["neg1"])
-                opt2_cd = info_cd["opt2"].get(resp["opt2"])
+            else:
+                age_lb = None
+                gs_lb = None
+                eco_lb = None
+                edu_lb = None
+                opt1_lb = None
+                neg1_lb = None
+                opt2_lb = None
 
-                sent_lb = self.classes_list[sent_cd]                      
-                in_out_door_lb = info_lb["in_out_door"].get(in_out_door_cd)
-                age_lb = info_lb["age"].get(age_cd)
-                gs_lb = info_lb["gs"].get(gs_cd)
-                eco_lb = info_lb["eco"].get(eco_cd)
-                edu_lb = info_lb["edu"].get(edu_cd)
-                opt1_lb = info_lb["opt1"].get(opt1_cd)
-                neg1_lb = info_lb["neg1"].get(neg1_cd)
-                opt2_lb = info_lb["opt2"].get(opt2_cd)
+                age_cd = None
+                gs_cd = None
+                eco_cd = None
+                edu_cd = None
+                opt1_cd = None
+                neg1_cd = None
+                opt2_cd = None
 
-                data_cd.append([worker_id, assig_id, img_id, sent_cd, in_out_door_cd, 
-                                    age_cd, gs_cd, eco_cd, edu_cd, opt1_cd, neg1_cd, opt2_cd,
-                                    ",".join(comments),
-                                    ",".join([str(i) for i in perceptions_cd])])
 
-                data_lb.append([worker_id, assig_id, img_id, sent_lb, in_out_door_lb, 
-                                    age_lb, gs_lb, eco_lb, edu_lb, opt1_lb, neg1_lb, opt2_lb,
-                                    ",".join(comments),
-                                    ",".join([str(i) for i in perceptions_lb])])
+            data_cd.append([img_id, wkr_id, sent_cd, 
+                                age_cd, gs_cd, eco_cd, edu_cd, opt1_cd, neg1_cd, opt2_cd,
+                                ",".join([str(i) for i in perceptions_cd]),
+                                ",".join([str(i) for i in objects_cd])])
+
+            data_lb.append([img_id, wkr_id, sent_lb,
+                                age_lb, gs_lb, eco_lb, edu_lb, opt1_lb, neg1_lb, opt2_lb,
+                                ",".join([str(i) for i in perceptions_lb]),
+                                ",".join([str(i) for i in objects_lb])])
         
         data_lb_t = list()
-        data_lb_t.append(["assignment_img", "data", "field"])
+        data_lb_t.append(["image", "worker", "data", "field"])
         for dd in data_lb[1:]:
-            for i, d in enumerate(dd[3:12]):
-                data_lb_t.append([f"{dd[1]}_{dd[2]}", d, data_lb[0][i+3]])
-            for r in dd[13].split(','):
-                data_lb_t.append([f"{dd[1]}_{dd[2]}", r, "perceptions"])
+            for i, d in enumerate(dd[2:10]):
+                if d is not None: data_lb_t.append([f"{dd[0]},{dd[1]}", d, data_lb[0][i+2]])
+            for r in dd[10].split(','):
+                if r!='': data_lb_t.append([f"{dd[0]},{dd[1]}", r, "perceptions"])
+            for r in dd[11].split(','):
+                if r!='': data_lb_t.append([f"{dd[0]},{dd[1]}", r, "objects"])
         
         data_cd_t = list()
-        data_cd_t.append(["assignment_img", "data", "field"])
+        data_cd_t.append(["image", "worker", "data", "field"])
         for dd in data_cd[1:]:
-            for i, d in enumerate(dd[3:12]):
-                data_cd_t.append([f"{dd[1]}_{dd[2]}", d, data_cd[0][i+3]])
-            for r in dd[13].split(','):
-                data_cd_t.append([f"{dd[1]}_{dd[2]}", r, "perceptions"])
+            for i, d in enumerate(dd[2:10]):
+                if d is not None: data_cd_t.append([f"{dd[0]},{dd[1]}", d, data_cd[0][i+2]])
+            for r in dd[10].split(','):
+                if r!='': data_cd_t.append([f"{dd[0]},{dd[1]}", r, "perceptions"])
+            for r in dd[11].split(','):
+                if r!='': data_cd_t.append([f"{dd[0]},{dd[1]}", r, "objects"])
         
         with open(f'{self.dataset_folder}/raw_label_t.csv', 'w') as f:
             write = csv.writer(f, delimiter=';')
