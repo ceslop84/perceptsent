@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1YmkyfUv0-hyNusijh0JCkURlu9XWf9YJ.jpg</filename>
+	<path>/object_detection/1YmkyfUv0-hyNusijh0JCkURlu9XWf9YJ.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>traffic cone</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>152</xmin>
+			<ymin>82</ymin>
+			<xmax>477</xmax>
+			<ymax>640</ymax>
+		</bndbox>
+	</object>
+</annotation>

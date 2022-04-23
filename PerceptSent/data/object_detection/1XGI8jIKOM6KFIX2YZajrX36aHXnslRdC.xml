@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1XGI8jIKOM6KFIX2YZajrX36aHXnslRdC.jpg</filename>
+	<path>/object_detection/1XGI8jIKOM6KFIX2YZajrX36aHXnslRdC.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>800</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>bicicle</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>167</xmin>
+			<ymin>537</ymin>
+			<xmax>487</xmax>
+			<ymax>741</ymax>
+		</bndbox>
+	</object>
+</annotation>

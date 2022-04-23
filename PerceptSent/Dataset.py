@@ -4,6 +4,7 @@ import json
 from random import shuffle
 import numpy as np
 import pandas as pd
+import xml.etree.ElementTree as ET
 
 class Dataset():
         
@@ -14,10 +15,11 @@ class Dataset():
         shift_neutral = ["positive", "negative", None]
         method = ["individual", "dominant_3", "dominant_4", "dominant_5", "average"]
         data_augmented = [True, False, None]
-        descriptors = [None, "age", "gs", "eco", "edu", "opt1", "neg1", "opt2", "reasons"]
+        metadatada = ["individual", "aggregated"]
+        perceptions = ["individual", "aggregated"]
+        descriptors = [None, "age", "gs", "eco", "edu", "opt1", "neg1", "opt2", "perceptions", "objects"]
         filter = [True, False]
         class_balance = [0, 1.25] (p = samples from greater class/samples from smaller class, i.e.: 100/10 = 10.0)
-        include_no_data = [False, True]
         dataset_strategy = [img_agr, wkr_agr]
         dataset_size = [0, ..., 5000] (integer value)
         
@@ -72,7 +74,7 @@ class Dataset():
                 'td': 5, 'td_opt2': 5
                 }
 
-            reasons = {
+            perceptions = {
                 "Accident": 0,
                 "Animals": 1,
                 "Art/Architecture": 2,
@@ -112,6 +114,155 @@ class Dataset():
                 'It has positive and negative elements (please indicate which in "Comments")': 36,
                 }
 
+            objects = {
+                "ambulance": 0,
+                "anchor": 1,
+                "animal": 2,
+                "anvil": 3,
+                "atv": 4,
+                "ball": 5,
+                "baloon": 6,
+                "barbed wire": 7,
+                "barrel": 8,
+                "barrell": 9,
+                "beach": 10,
+                "bed": 11,
+                "bench": 12,
+                "bicicle": 13,
+                "birdhouse": 14,
+                "boat": 15,
+                "bomb": 16,
+                "bones": 17,
+                "bookshelve": 18,
+                "bookstand": 19,
+                "bridge": 20,
+                "building": 21,
+                "bus": 22,
+                "cactus": 23,
+                "camera": 24,
+                "car": 25,
+                "carriage": 26,
+                "cave": 27,
+                "chair": 28,
+                "chemical toilet": 29,
+                "chimney": 30,
+                "clock": 31,
+                "coffe machine": 32,
+                "collumn": 33,
+                "container": 34,
+                "couch": 35,
+                "court": 36,
+                "crane": 37,
+                "crosswalk": 38,
+                "debris": 39,
+                "dirt": 40,
+                "door": 41,
+                "dumpster": 42,
+                "excavator": 43,
+                "fan": 44,
+                "ferris wheel": 45,
+                "fire": 46,
+                "firefighter": 47,
+                "fireplace": 48,
+                "firetruck": 49,
+                "fireworks": 50,
+                "flag": 51,
+                "flowers": 52,
+                "food stand": 53,
+                "fork": 54,
+                "fountain": 55,
+                "gas pump": 56,
+                "gate": 57,
+                "glove": 58,
+                "graffiti": 59,
+                "grass": 60,
+                "grave": 61,
+                "guitar": 62,
+                "hammock": 63,
+                "helicopter": 64,
+                "ice": 65,
+                "insect": 66,
+                "key": 67,
+                "lava": 68,
+                "lawnmower": 69,
+                "light pole": 70,
+                "lock": 71,
+                "mail box": 72,
+                "manhole cover": 73,
+                "marshmallow": 74,
+                "mattress": 75,
+                "megaphone": 76,
+                "moon": 77,
+                "motor": 78,
+                "motorcycle": 79,
+                "mountain": 80,
+                "oven": 81,
+                "pathway": 82,
+                "pen": 83,
+                "person": 84,
+                "phone": 85,
+                "phone booth": 86,
+                "pizza": 87,
+                "plane": 88,
+                "police car": 89,
+                "policeman": 90,
+                "pool": 91,
+                "power pole": 92,
+                "power wires": 93,
+                "pushcart": 94,
+                "pyramid": 95,
+                "radio": 96,
+                "rainbow": 97,
+                "river": 98,
+                "road": 99,
+                "rocks": 100,
+                "sea": 101,
+                "shoe": 102,
+                "shopping cart": 103,
+                "sidewalk": 104,
+                "sign": 105,
+                "skateboard": 106,
+                "sky": 107,
+                "smoke": 108,
+                "soldier": 109,
+                "spoon": 110,
+                "statue": 111,
+                "street": 112,
+                "stuffed animal": 113,
+                "sun": 114,
+                "syringe": 115,
+                "table": 116,
+                "tank": 117,
+                "tent": 118,
+                "toilet": 119,
+                "tractor": 120,
+                "traffic cone": 121,
+                "trailer home": 122,
+                "train": 123,
+                "train track": 124,
+                "trash": 125,
+                "trash can": 126,
+                "tree": 127,
+                "tree trunk": 128,
+                "truck": 129,
+                "tunnel": 130,
+                "umbrella": 131,
+                "van": 132,
+                "vegetation": 133,
+                "vr": 134,
+                "wall": 135,
+                "water tank": 136,
+                "waterfall": 137,
+                "weapom": 138,
+                "weapon": 139,
+                "wheel": 140,
+                "wheelchair": 141,
+                "wind turbine": 142,
+                "windmill": 143,
+                "window": 144,
+                "wristwatch": 145
+            }
+
             in_out_door = {'no_in_out_door': 0, 'Indoor': 1, 'Outdoor': 2}
 
             informations = {
@@ -122,7 +273,8 @@ class Dataset():
                 "opt1": opt1,
                 "neg1": neg1,
                 "opt2": opt2,
-                "reasons": reasons,
+                "perceptions": perceptions,
+                "objects": objects,
                 "in_out_door": in_out_door
             }
 
@@ -176,7 +328,7 @@ class Dataset():
                 5: 'td_opt2'
                 }
 
-            reasons = {
+            perceptions = {
                 0: "Accident",
                 1: "Animals",
                 2: "Art/Architecture",
@@ -216,6 +368,155 @@ class Dataset():
                 36: 'It has positive and negative elements (please indicate which in "Comments")',
                 }
 
+            objects = {
+                0: "ambulance",
+                1: "anchor",
+                2: "animal",
+                3: "anvil",
+                4: "atv",
+                5: "ball",
+                6: "baloon",
+                7: "barbed wire",
+                8: "barrel",
+                9: "barrell",
+                10: "beach",
+                11: "bed",
+                12: "bench",
+                13: "bicicle",
+                14: "birdhouse",
+                15: "boat",
+                16: "bomb",
+                17: "bones",
+                18: "bookshelve",
+                19: "bookstand",
+                20: "bridge",
+                21: "building",
+                22: "bus",
+                23: "cactus",
+                24: "camera",
+                25: "car",
+                26: "carriage",
+                27: "cave",
+                28: "chair",
+                29: "chemical toilet",
+                30: "chimney",
+                31: "clock",
+                32: "coffe machine",
+                33: "collumn",
+                34: "container",
+                35: "couch",
+                36: "court",
+                37: "crane",
+                38: "crosswalk",
+                39: "debris",
+                40: "dirt",
+                41: "door",
+                42: "dumpster",
+                43: "excavator",
+                44: "fan",
+                45: "ferris wheel",
+                46: "fire",
+                47: "firefighter",
+                48: "fireplace",
+                49: "firetruck",
+                50: "fireworks",
+                51: "flag",
+                52: "flowers",
+                53: "food stand",
+                54: "fork",
+                55: "fountain",
+                56: "gas pump",
+                57: "gate",
+                58: "glove",
+                59: "graffiti",
+                60: "grass",
+                61: "grave",
+                62: "guitar",
+                63: "hammock",
+                64: "helicopter",
+                65: "ice",
+                66: "insect",
+                67: "key",
+                68: "lava",
+                69: "lawnmower",
+                70: "light pole",
+                71: "lock",
+                72: "mail box",
+                73: "manhole cover",
+                74: "marshmallow",
+                75: "mattress",
+                76: "megaphone",
+                77: "moon",
+                78: "motor",
+                79: "motorcycle",
+                80: "mountain",
+                81: "oven",
+                82: "pathway",
+                83: "pen",
+                84: "person",
+                85: "phone",
+                86: "phone booth",
+                87: "pizza",
+                88: "plane",
+                89: "police car",
+                90: "policeman",
+                91: "pool",
+                92: "power pole",
+                93: "power wires",
+                94: "pushcart",
+                95: "pyramid",
+                96: "radio",
+                97: "rainbow",
+                98: "river",
+                99: "road",
+                100: "rocks",
+                101: "sea",
+                102: "shoe",
+                103: "shopping cart",
+                104: "sidewalk",
+                105: "sign",
+                106: "skateboard",
+                107: "sky",
+                108: "smoke",
+                109: "soldier",
+                110: "spoon",
+                111: "statue",
+                112: "street",
+                113: "stuffed animal",
+                114: "sun",
+                115: "syringe",
+                116: "table",
+                117: "tank",
+                118: "tent",
+                119: "toilet",
+                120: "tractor",
+                121: "traffic cone",
+                122: "trailer home",
+                123: "train",
+                124: "train track",
+                125: "trash",
+                126: "trash can",
+                127: "tree",
+                128: "tree trunk",
+                129: "truck",
+                130: "tunnel",
+                131: "umbrella",
+                132: "van",
+                133: "vegetation",
+                134: "vr",
+                135: "wall",
+                136: "water tank",
+                137: "waterfall",
+                138: "weapom",
+                139: "weapon",
+                140: "wheel",
+                141: "wheelchair",
+                142: "wind turbine",
+                143: "windmill",
+                144: "window",
+                145: "wristwatch"
+            }
+
             in_out_door = {0: 'no_in_out_door',1: 'Indoor',2: 'Outdoor'}
 
             informations = {
@@ -226,7 +527,8 @@ class Dataset():
                 "opt1": opt1,
                 "neg1": neg1,
                 "opt2": opt2,
-                "reasons": reasons,
+                "perceptions": perceptions,
+                "objects": objects,
                 "in_out_door": in_out_door
             }
 
@@ -309,25 +611,51 @@ class Dataset():
         num_seq = int(cfg[0])
         model = cfg[1]
         nr_classes = int(cfg[2])
-        expand_neutral = (cfg[3]=="True")
+        expand_neutral = (cfg[3].lower()=="true")
         shift_neutral = str(cfg[4])
         method = str(cfg[5])
-        data_augmented = (cfg[6]=="True")
-        metadata = (cfg[7]=="True")
-        semantic = (cfg[8]=="True")
-        strategy = str(cfg[9])
-        if cfg[10]: 
-            size = int(cfg[10])
+        data_augmented = (cfg[6].lower()=="true")
+
+        if cfg[7].lower() == "aggregated":
+            metadata = "aggregated"
+        elif cfg[7].lower() == "individual":
+            metadata = "individual"
+        else:
+            metadata = False
+
+        if cfg[8].lower() == "aggregated":
+            perceptions = "aggregated"
+        elif cfg[8].lower() == "individual":
+            perceptions = "individual"
+        else:
+            perceptions = False
+
+        object_detection = (cfg[9]=="true")
+
+        if "dominant" in method and (metadata == "individual" or perceptions == "individual"):
+            raise Exception("It's not possible to process aggregated sentiment with individual metadata or/and perceptions.")
+
+        if "individual" in method and metadata == "aggregated":
+            raise Exception("It's not possible to process individual sentiment with aggregated metadata.")
+
+        strategy = str(cfg[10])
+
+        if cfg[11]: 
+            size = int(cfg[11])
         else:
             size = None
-        class_balance = float(cfg[11].replace(",","."))
-        include_no_data = (cfg[12]=="True")
-        
 
-        self.dataset_json = f"{dataset}/dataset.json"
+        if cfg[12]:
+            class_balance = float(cfg[12].replace(",","."))
+        else:
+            class_balance = None
+
         self.model = model
         self.num_seq = num_seq
         self.method = method
+        self.perceptions = perceptions
+        self.object_detection = object_detection
+        self.metadata = metadata
         self.nr_classes = nr_classes
         self.expand_neutral = expand_neutral
         self.shift_neutral = shift_neutral
@@ -337,9 +665,7 @@ class Dataset():
         self.codes= create_coded_informations()
         self.labels = create_label_informations()
         self.data_augmented = data_augmented
-        self.filter = filter
         self.class_balance = class_balance
-        self.include_no_data = include_no_data
         self.strategy = strategy
         self.size = size
         self.profiling = profiling
@@ -347,8 +673,10 @@ class Dataset():
         attributes = list()
         if metadata:
             attributes += ["age", "gs", "eco", "edu", "opt1", "neg1", "opt2"]
-        if semantic:
-            attributes += ["reasons"]
+        if perceptions:
+            attributes += ["perceptions"]
+        if object_detection:
+            attributes += ["objects"]
         self.attributes = attributes
 
         self.data = None
@@ -358,7 +686,9 @@ class Dataset():
         
         self.create_dir(f"{output}")
         self.output_folder = self.create_dir(f"{output}/{self.num_seq}")
+        self.dataset_json = f"{dataset}/dataset.json"
         self.dataset_folder = self.create_dir(f"{output}/{self.num_seq}/dataset")
+        self.dataset_object_detection = f"{dataset}/object_detection"
         if self.attributes:
             self.create_dir(f"{output}/{self.num_seq}/dataset/descriptors")
 
@@ -447,9 +777,11 @@ class Dataset():
         cfg["expand_neutral"] = self.expand_neutral
         cfg["shift_neutral"] = self.shift_neutral
         cfg["data_augmented"] = self.data_augmented
+        cfg["metadata"] = self.metadata
+        cfg["perceptions"] = self.perceptions
+        cfg["objet_detection"] = self.object_detection
         cfg["descriptors"] = self.attributes
         cfg["class_balance"] = self.class_balance
-        cfg["include_no_data"] = self.include_no_data
         cfg["strategy"] = self.strategy
         cfg["size"] = self.size
         return cfg
@@ -459,7 +791,7 @@ class Dataset():
         def read_data(file_in):
             with open(file_in, 'r') as j:
                 json_data = json.load(j)
-            tasks = json_data.get("tarefas")
+            tasks = json_data.get("tasks")
             return tasks
 
         def get_workers_info(tasks):
@@ -480,19 +812,19 @@ class Dataset():
             worker_info = [x for x in workers_info if x["worker_id"] == worker_id and x["info_resp"]]
             if worker_info:
                 data = worker_info[0].get("info_resp")
-                data["reasons"] = image.get("reasons", [])
-                return False, data
+                data["perceptions"] = image.get("perceptions", [])
+                return data
             else:
-                return True, {
-                            "age": "noage",
-                            "gs": "nogender",
-                            "eco": "noeco",
-                            "edu": "noedu",
-                            "opt1": "no_opt1",
-                            "neg1": "no_neg1",
-                            "opt2": "no_opt2",
-                            "reasons": image.get("reasons", [])
-                            }
+                return {
+                        "age": "noage",
+                        "gs": "nogender",
+                        "eco": "noeco",
+                        "edu": "noedu",
+                        "opt1": "no_opt1",
+                        "neg1": "no_neg1",
+                        "opt2": "no_opt2",
+                        "perceptions": image.get("perceptions", [])
+                        }
 
 
         tasks = read_data(self.dataset_json)
@@ -514,35 +846,53 @@ class Dataset():
         for assgn in tasks:
             image_resps = assgn.get('image_resps')  
             for image in image_resps:
-                sent = list()
-                add_data = True
-                sent.append(image.get('id'))
-                sent.append(assgn.get('assignment_id'))
-                sent.append(self.classes_dict.get(image.get('sentiment')))
+                record = list()
+                record.append(image.get('id'))
+                record.append(assgn.get('assignment_id'))
+                record.append(self.classes_dict.get(image.get('sentiment')))
 
                 if self.attributes:
-                    no_data, info_resp = get_info_resp(assgn, image, workers_info)
-                    if not no_data or (self.include_no_data and no_data):                      
-                        for desc_label in self.attributes:
-                            desc = informations.get(desc_label)
-                            class_max = max(desc, key=desc.get)
-                            tam = desc.get(class_max)
-                            desc_list = [0] * (tam+1)
-                            if desc_label == "reasons":
-                                for r in image.get(desc_label, []):
-                                    r_id = informations[desc_label].get(r, -1)
-                                    if r_id >0:
-                                        desc_list[r_id]+=1
-                            else:
-                                cat = info_resp.get(desc_label)
-                                cat_id = informations.get(desc_label).get(cat)
-                                desc_list[cat_id]+=1
-                            sent.append(desc_list)
-                    else:
-                        add_data = False  
+                    info_resp = get_info_resp(assgn, image, workers_info)
                 
-                if add_data:
-                    imgs.append(sent)    
+                att = dict()
+                desc_metadata = list()    
+                for desc_label in self.attributes:
+                    cat = None
+                    cat_id = None
+                    desc = informations.get(desc_label)
+                    desc_list = [0] * (desc.get(max(desc, key=desc.get))+1)
+                    
+                    if desc_label in ["age", "gs", "eco", "edu", "opt1", "neg1", "opt2"]:
+                        cat = info_resp.get(desc_label)
+                        cat_id = informations.get(desc_label).get(cat)
+                        desc_list[cat_id]+=1
+                        desc_metadata += desc_list
+                    elif desc_label == "perceptions":
+                        for cat in image.get(desc_label, []):
+                            cat_id = informations[desc_label].get(cat, -1)
+                            if cat_id >0:
+                                desc_list[cat_id]+=1
+                        att["perceptions"] = desc_list
+                    elif desc_label == "objects":
+                        try: 
+                            tree = ET.parse(f"{self.dataset_object_detection}/{image.get('id')}.xml")
+                            root = tree.getroot()
+                            objects = root.findall("./object/name")
+                        except:
+                            objects = list()
+                        for obj in objects:
+                            cat = obj.text
+                            cat_id = informations[desc_label].get(cat, -1)
+                            if cat_id >0:
+                                desc_list[cat_id]+=1
+                        att["objects"] = desc_list
+                    else:
+                        raise Exception("Unknown attribute!")
+
+                if desc_metadata:
+                    att["metadata"] = desc_metadata
+                record.append(att)
+                imgs.append(record)    
 
         self.data = imgs
 
@@ -953,18 +1303,32 @@ class Dataset():
                 for img in self.imgs_agg:
                     f.write(f"{img[0]} {str(img[2])}\n")
         
-        self.data_file = f"{self.dataset_folder}/data.txt"
+        self.dataset_file = f"{self.dataset_folder}/data.txt"
 
     def __save_descriptors(self):
-        
+
         if not self.attributes:
             self.attributes = None
             return None
 
-     
         imgs = list()
         workers = list()
-        descriptors = list()
+        metadata = list()
+        perceptions = list()
+        perceptions_agg = list()
+        objects = list()
+        imgs_agg_temp = list()
+        perc_agg_temp = list()             
+        
+        for img in self.data:  
+            img_name = img[0]
+            img_p = img[3].get("perceptions", [])
+            if img_name not in imgs_agg_temp:
+                imgs_agg_temp.append(img[0])
+                perc_agg_temp.append(img_p)
+            else:
+                img_id = imgs_agg_temp.index(img_name)   
+                perc_agg_temp[img_id] = [x + y for x, y in zip(perc_agg_temp[img_id], img_p)]
 
         for img in self.data:
 
@@ -973,22 +1337,33 @@ class Dataset():
             else:
                 img_name = img[0]
             
+            atts = img[3]
+            img_m = atts.get("metadata", [])
+            img_p = atts.get("perceptions", [])
+            img_o = atts.get("objects", [])
+            img_pa = perc_agg_temp[imgs_agg_temp.index(img[0])]
 
-            desc = list()
-            for d in img[3:]:
-                desc += d
-
-            if img[0] not in imgs:
+            if img_name not in imgs:
                 imgs.append(img_name)
                 workers.append(list())
-                descriptors.append([0]*len(desc))
-            
-            img_id = imgs.index(img_name)   
-            workers[img_id].append(img[1])
-            desc_sum = [x + y for x, y in zip(descriptors[img_id], desc)]
-            descriptors[img_id] = desc_sum
-        
+                metadata.append(img_m)
+                perceptions.append(img_p)
+                perceptions_agg.append(img_pa)
+                objects.append(img_o)
+            else:
+                img_id = imgs.index(img_name)   
+                workers[img_id].append(img[1])
+                metadata[img_id] = [x + y for x, y in zip(metadata[img_id], img_m)]
+                perceptions[img_id] = [x + y for x, y in zip(perceptions[img_id], img_p)]
+                perceptions_agg.append(img_pa)
+                objects[img_id] = [x + y for x, y in zip(objects[img_id], img_o)]           
 
+        descriptors = list()
+        if self.method == "individual" and self.perceptions == "aggregated":
+            descriptors = [m+p+o for m, p, o in zip(metadata, perceptions_agg, objects)]
+        else:
+            descriptors = [m+p+o for m, p, o in zip(metadata, perceptions, objects)]
+            
         file_list = list()
         desc_content = list()
         if self.data_augmented:
@@ -1000,7 +1375,6 @@ class Dataset():
             for i, img in enumerate(imgs):
                 file_list.append(f"{img}.txt")
                 desc_content.append(descriptors[i])
-        
 
         for file_name, content in zip(file_list, desc_content):
             np.savetxt(f"{self.dataset_folder}/descriptors/{file_name}", np.asarray(content, dtype="float32")) 
@@ -1015,17 +1389,17 @@ class Dataset():
         info_lb = self.labels
         data_lb = list()
         data_cd = list()
-        headers = ["worker", "assignment", "img", "sentiment", "in_out_door", "age", "gs", "eco", "edu", "opt1", "neg1", "opt2", "comments", "reasons"]
+        headers = ["worker", "assignment", "img", "sentiment", "in_out_door", "age", "gs", "eco", "edu", "opt1", "neg1", "opt2", "comments", "perceptions"]
         data_lb.append(headers)
         data_cd.append(headers)
         
         workers = dict()
-        for assig in json_data["tarefas"]:
+        for assig in json_data["tasks"]:
             worker = assig["worker_id"]
             if not workers.get(worker, None):
                 workers[worker] = assig["info_resp"]
         
-        for assig in json_data["tarefas"]:
+        for assig in json_data["tasks"]:
             resp = workers.get(assig["worker_id"])
             if resp is None:
                 resp = dict()
@@ -1040,13 +1414,13 @@ class Dataset():
             for img in assig["image_resps"]:
 
                 comments = list()
-                reasons_cd = [0] * 37
-                reasons_lb = list()
-                for r in img["reasons"]:
-                    r_id = info_cd["reasons"].get(r, -1)
+                perceptions_cd = [0] * 37
+                perceptions_lb = list()
+                for r in img["perceptions"]:
+                    r_id = info_cd["perceptions"].get(r, -1)
                     if r_id >0:
-                        reasons_lb.append(r)
-                        reasons_cd[r_id]+=1
+                        perceptions_lb.append(r)
+                        perceptions_cd[r_id]+=1
                     else:
                         r.replace(",", "")
                         comments.append(r)
@@ -1078,12 +1452,12 @@ class Dataset():
                 data_cd.append([worker_id, assig_id, img_id, sent_cd, in_out_door_cd, 
                                     age_cd, gs_cd, eco_cd, edu_cd, opt1_cd, neg1_cd, opt2_cd,
                                     ",".join(comments),
-                                    ",".join([str(i) for i in reasons_cd])])
+                                    ",".join([str(i) for i in perceptions_cd])])
 
                 data_lb.append([worker_id, assig_id, img_id, sent_lb, in_out_door_lb, 
                                     age_lb, gs_lb, eco_lb, edu_lb, opt1_lb, neg1_lb, opt2_lb,
                                     ",".join(comments),
-                                    ",".join([str(i) for i in reasons_lb])])
+                                    ",".join([str(i) for i in perceptions_lb])])
         
         data_lb_t = list()
         data_lb_t.append(["assignment_img", "data", "field"])
@@ -1091,7 +1465,7 @@ class Dataset():
             for i, d in enumerate(dd[3:12]):
                 data_lb_t.append([f"{dd[1]}_{dd[2]}", d, data_lb[0][i+3]])
             for r in dd[13].split(','):
-                data_lb_t.append([f"{dd[1]}_{dd[2]}", r, "reasons"])
+                data_lb_t.append([f"{dd[1]}_{dd[2]}", r, "perceptions"])
         
         data_cd_t = list()
         data_cd_t.append(["assignment_img", "data", "field"])
@@ -1099,7 +1473,7 @@ class Dataset():
             for i, d in enumerate(dd[3:12]):
                 data_cd_t.append([f"{dd[1]}_{dd[2]}", d, data_cd[0][i+3]])
             for r in dd[13].split(','):
-                data_cd_t.append([f"{dd[1]}_{dd[2]}", r, "reasons"])
+                data_cd_t.append([f"{dd[1]}_{dd[2]}", r, "perceptions"])
         
         with open(f'{self.dataset_folder}/raw_label_t.csv', 'w') as f:
             write = csv.writer(f, delimiter=';')

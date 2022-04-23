@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1vxMQCVr5GpQUzWSxPdXlJlOjA_yvyQH-.jpg</filename>
+	<path>/object_detection/1vxMQCVr5GpQUzWSxPdXlJlOjA_yvyQH-.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>333</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>soldier</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>174</xmin>
+			<ymin>72</ymin>
+			<xmax>452</xmax>
+			<ymax>333</ymax>
+		</bndbox>
+	</object>
+</annotation>

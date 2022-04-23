@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1pdP_tSURUMEZH_1HSrdpoukN6eDaBNPU.jpg</filename>
+	<path>/object_detection/1pdP_tSURUMEZH_1HSrdpoukN6eDaBNPU.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>333</width>
+		<height>499</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>animal</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>34</xmin>
+			<ymin>75</ymin>
+			<xmax>279</xmax>
+			<ymax>461</ymax>
+		</bndbox>
+	</object>
+</annotation>

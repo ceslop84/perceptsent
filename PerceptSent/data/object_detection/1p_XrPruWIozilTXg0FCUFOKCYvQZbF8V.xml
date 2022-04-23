@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1p_XrPruWIozilTXg0FCUFOKCYvQZbF8V.jpg</filename>
+	<path>/object_detection/1p_XrPruWIozilTXg0FCUFOKCYvQZbF8V.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>collumn</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>162</xmin>
+			<ymin>194</ymin>
+			<xmax>235</xmax>
+			<ymax>393</ymax>
+		</bndbox>
+	</object>
+</annotation>

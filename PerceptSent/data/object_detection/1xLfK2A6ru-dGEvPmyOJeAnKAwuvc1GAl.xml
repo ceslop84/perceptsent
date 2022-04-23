@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1xLfK2A6ru-dGEvPmyOJeAnKAwuvc1GAl.jpg</filename>
+	<path>/object_detection/1xLfK2A6ru-dGEvPmyOJeAnKAwuvc1GAl.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>335</width>
+		<height>500</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>toilet</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>33</xmin>
+			<ymin>196</ymin>
+			<xmax>195</xmax>
+			<ymax>374</ymax>
+		</bndbox>
+	</object>
+</annotation>

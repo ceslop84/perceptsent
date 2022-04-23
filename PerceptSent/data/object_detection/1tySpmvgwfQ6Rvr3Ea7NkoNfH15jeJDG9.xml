@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1tySpmvgwfQ6Rvr3Ea7NkoNfH15jeJDG9.jpg</filename>
+	<path>/object_detection/1tySpmvgwfQ6Rvr3Ea7NkoNfH15jeJDG9.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>bridge</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>3</xmin>
+			<ymin>5</ymin>
+			<xmax>620</xmax>
+			<ymax>576</ymax>
+		</bndbox>
+	</object>
+</annotation>

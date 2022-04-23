@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1ScifQgtcfsTZUCByBAcGl6lvaLhOnuUh.jpg</filename>
+	<path>/object_detection/1ScifQgtcfsTZUCByBAcGl6lvaLhOnuUh.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>375</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>trash can</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>31</xmin>
+			<ymin>21</ymin>
+			<xmax>434</xmax>
+			<ymax>375</ymax>
+		</bndbox>
+	</object>
+</annotation>

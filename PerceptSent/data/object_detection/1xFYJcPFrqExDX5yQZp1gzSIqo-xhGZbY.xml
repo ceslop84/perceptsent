@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1xFYJcPFrqExDX5yQZp1gzSIqo-xhGZbY.jpg</filename>
+	<path>/object_detection/1xFYJcPFrqExDX5yQZp1gzSIqo-xhGZbY.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>lawnmower</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>30</xmin>
+			<ymin>115</ymin>
+			<xmax>579</xmax>
+			<ymax>451</ymax>
+		</bndbox>
+	</object>
+</annotation>

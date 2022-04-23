@@ -1,0 +1,50 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1RH-fAYIPV9YxesYM4UPvOqtkfZyVukL1.jpg</filename>
+	<path>/object_detection/1RH-fAYIPV9YxesYM4UPvOqtkfZyVukL1.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>trash can</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1</xmin>
+			<ymin>147</ymin>
+			<xmax>278</xmax>
+			<ymax>603</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>trash can</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>242</xmin>
+			<ymin>85</ymin>
+			<xmax>505</xmax>
+			<ymax>429</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>trash can</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>457</xmin>
+			<ymin>43</ymin>
+			<xmax>640</xmax>
+			<ymax>347</ymax>
+		</bndbox>
+	</object>
+</annotation>

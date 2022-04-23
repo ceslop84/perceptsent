@@ -1,0 +1,14 @@
+<annotation>
+	<folder>object_detection</folder>
+	<filename>1XnPJsIO3Sn1A7V9AUpMAVyAcDqL5gQCc.jpg</filename>
+	<path>/object_detection/1XnPJsIO3Sn1A7V9AUpMAVyAcDqL5gQCc.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>375</width>
+		<height>500</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+</annotation>

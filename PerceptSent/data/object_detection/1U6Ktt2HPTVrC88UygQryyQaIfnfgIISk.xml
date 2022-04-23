@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1U6Ktt2HPTVrC88UygQryyQaIfnfgIISk.jpg</filename>
+	<path>/object_detection/1U6Ktt2HPTVrC88UygQryyQaIfnfgIISk.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>400</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>animal</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>113</xmin>
+			<ymin>112</ymin>
+			<xmax>377</xmax>
+			<ymax>298</ymax>
+		</bndbox>
+	</object>
+</annotation>

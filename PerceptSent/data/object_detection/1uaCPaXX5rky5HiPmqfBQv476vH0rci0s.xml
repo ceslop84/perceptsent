@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1uaCPaXX5rky5HiPmqfBQv476vH0rci0s.jpg</filename>
+	<path>/object_detection/1uaCPaXX5rky5HiPmqfBQv476vH0rci0s.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>fireplace</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>41</xmin>
+			<ymin>42</ymin>
+			<xmax>620</xmax>
+			<ymax>539</ymax>
+		</bndbox>
+	</object>
+</annotation>

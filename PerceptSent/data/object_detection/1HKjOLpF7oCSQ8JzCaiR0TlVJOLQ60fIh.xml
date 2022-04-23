@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1HKjOLpF7oCSQ8JzCaiR0TlVJOLQ60fIh.jpg</filename>
+	<path>/object_detection/1HKjOLpF7oCSQ8JzCaiR0TlVJOLQ60fIh.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>454</width>
+		<height>454</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>debris</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>6</xmin>
+			<ymin>83</ymin>
+			<xmax>454</xmax>
+			<ymax>454</ymax>
+		</bndbox>
+	</object>
+</annotation>

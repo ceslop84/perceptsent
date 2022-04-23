@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1K4rFOTNxX61AQBD75WlvSiWqj3-L8YIR.jpg</filename>
+	<path>/object_detection/1K4rFOTNxX61AQBD75WlvSiWqj3-L8YIR.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>360</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>tree</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>215</xmin>
+			<ymin>104</ymin>
+			<xmax>640</xmax>
+			<ymax>360</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1WZvgcjTKdUiTx0A0a6Gd4flqbwRduqgC.jpg</filename>
+	<path>/object_detection/1WZvgcjTKdUiTx0A0a6Gd4flqbwRduqgC.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>900</width>
+		<height>1200</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>vegetation</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1</xmin>
+			<ymin>183</ymin>
+			<xmax>869</xmax>
+			<ymax>1200</ymax>
+		</bndbox>
+	</object>
+</annotation>

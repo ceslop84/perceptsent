@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1uiCbKsWLX1SnpUTY8R8u_lEkPf5VWxTv.jpg</filename>
+	<path>/object_detection/1uiCbKsWLX1SnpUTY8R8u_lEkPf5VWxTv.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>638</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>wristwatch</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>114</xmin>
+			<ymin>9</ymin>
+			<xmax>453</xmax>
+			<ymax>615</ymax>
+		</bndbox>
+	</object>
+</annotation>

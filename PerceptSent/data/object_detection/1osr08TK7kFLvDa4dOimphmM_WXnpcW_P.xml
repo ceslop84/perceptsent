@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1osr08TK7kFLvDa4dOimphmM_WXnpcW_P.jpg</filename>
+	<path>/object_detection/1osr08TK7kFLvDa4dOimphmM_WXnpcW_P.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>499</width>
+		<height>289</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>lock</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>102</xmin>
+			<ymin>38</ymin>
+			<xmax>284</xmax>
+			<ymax>247</ymax>
+		</bndbox>
+	</object>
+</annotation>

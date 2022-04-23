@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1DjzF9rqakTS5t49AR6cxcSOREs2SSlvq.jpg</filename>
+	<path>/object_detection/1DjzF9rqakTS5t49AR6cxcSOREs2SSlvq.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>437</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>trailer home</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>38</xmin>
+			<ymin>66</ymin>
+			<xmax>609</xmax>
+			<ymax>391</ymax>
+		</bndbox>
+	</object>
+</annotation>

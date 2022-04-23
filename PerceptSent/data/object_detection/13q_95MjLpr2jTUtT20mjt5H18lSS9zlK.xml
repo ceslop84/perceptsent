@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>13q_95MjLpr2jTUtT20mjt5H18lSS9zlK.jpg</filename>
+	<path>/object_detection/13q_95MjLpr2jTUtT20mjt5H18lSS9zlK.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>fork</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>74</xmin>
+			<ymin>175</ymin>
+			<xmax>538</xmax>
+			<ymax>523</ymax>
+		</bndbox>
+	</object>
+</annotation>

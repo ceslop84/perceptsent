@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1kfTJVF63Yy7IaFEwsYmta9diyLzWvh2n.jpg</filename>
+	<path>/object_detection/1kfTJVF63Yy7IaFEwsYmta9diyLzWvh2n.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>499</width>
+		<height>333</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>crane</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>32</xmin>
+			<ymin>91</ymin>
+			<xmax>397</xmax>
+			<ymax>272</ymax>
+		</bndbox>
+	</object>
+</annotation>

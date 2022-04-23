@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1Hfx_SHeFRtsxpOT_k-U43cKO6g1_gWni.jpg</filename>
+	<path>/object_detection/1Hfx_SHeFRtsxpOT_k-U43cKO6g1_gWni.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>392</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>bench</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>97</xmin>
+			<ymin>256</ymin>
+			<xmax>379</xmax>
+			<ymax>392</ymax>
+		</bndbox>
+	</object>
+</annotation>

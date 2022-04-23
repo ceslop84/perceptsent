@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1-9HQd-hsqNLw5z8Tik_p5dtET8duc354.jpg</filename>
+	<path>/object_detection/1-9HQd-hsqNLw5z8Tik_p5dtET8duc354.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>800</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>flowers</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>20</xmin>
+			<ymin>289</ymin>
+			<xmax>640</xmax>
+			<ymax>800</ymax>
+		</bndbox>
+	</object>
+</annotation>

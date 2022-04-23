@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>16nH1TXlpitQ77Qvtm9cx3H6cpWxO08i8.jpg</filename>
+	<path>/object_detection/16nH1TXlpitQ77Qvtm9cx3H6cpWxO08i8.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>375</width>
+		<height>500</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>dumpster</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>27</xmin>
+			<ymin>80</ymin>
+			<xmax>368</xmax>
+			<ymax>446</ymax>
+		</bndbox>
+	</object>
+</annotation>

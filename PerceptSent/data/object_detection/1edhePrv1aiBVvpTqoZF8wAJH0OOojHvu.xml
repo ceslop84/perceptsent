@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1edhePrv1aiBVvpTqoZF8wAJH0OOojHvu.jpg</filename>
+	<path>/object_detection/1edhePrv1aiBVvpTqoZF8wAJH0OOojHvu.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>manhole cover</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>88</xmin>
+			<ymin>47</ymin>
+			<xmax>559</xmax>
+			<ymax>557</ymax>
+		</bndbox>
+	</object>
+</annotation>

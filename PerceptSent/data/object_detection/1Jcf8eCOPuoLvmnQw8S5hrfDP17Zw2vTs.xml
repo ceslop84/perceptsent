@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1Jcf8eCOPuoLvmnQw8S5hrfDP17Zw2vTs.jpg</filename>
+	<path>/object_detection/1Jcf8eCOPuoLvmnQw8S5hrfDP17Zw2vTs.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>331</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>lava</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>59</xmin>
+			<ymin>47</ymin>
+			<xmax>455</xmax>
+			<ymax>278</ymax>
+		</bndbox>
+	</object>
+</annotation>

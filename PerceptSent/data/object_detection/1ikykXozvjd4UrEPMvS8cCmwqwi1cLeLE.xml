@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1ikykXozvjd4UrEPMvS8cCmwqwi1cLeLE.jpg</filename>
+	<path>/object_detection/1ikykXozvjd4UrEPMvS8cCmwqwi1cLeLE.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>499</width>
+		<height>333</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pool</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1</xmin>
+			<ymin>25</ymin>
+			<xmax>491</xmax>
+			<ymax>285</ymax>
+		</bndbox>
+	</object>
+</annotation>

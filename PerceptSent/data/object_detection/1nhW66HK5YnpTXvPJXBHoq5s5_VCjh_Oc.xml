@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1nhW66HK5YnpTXvPJXBHoq5s5_VCjh_Oc.jpg</filename>
+	<path>/object_detection/1nhW66HK5YnpTXvPJXBHoq5s5_VCjh_Oc.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>trash</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>123</xmin>
+			<ymin>459</ymin>
+			<xmax>488</xmax>
+			<ymax>591</ymax>
+		</bndbox>
+	</object>
+</annotation>

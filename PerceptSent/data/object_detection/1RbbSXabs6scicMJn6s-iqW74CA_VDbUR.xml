@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1RbbSXabs6scicMJn6s-iqW74CA_VDbUR.jpg</filename>
+	<path>/object_detection/1RbbSXabs6scicMJn6s-iqW74CA_VDbUR.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>499</width>
+		<height>333</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>window</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>71</xmin>
+			<ymin>35</ymin>
+			<xmax>423</xmax>
+			<ymax>263</ymax>
+		</bndbox>
+	</object>
+</annotation>

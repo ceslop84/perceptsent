@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1V-SFKdcPgCwbY-NgAuAq32n8ScYC2ZhT.jpg</filename>
+	<path>/object_detection/1V-SFKdcPgCwbY-NgAuAq32n8ScYC2ZhT.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>800</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>door</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>145</xmin>
+			<ymin>178</ymin>
+			<xmax>504</xmax>
+			<ymax>769</ymax>
+		</bndbox>
+	</object>
+</annotation>

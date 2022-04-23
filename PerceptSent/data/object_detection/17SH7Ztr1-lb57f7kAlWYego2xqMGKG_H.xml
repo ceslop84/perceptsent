@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>17SH7Ztr1-lb57f7kAlWYego2xqMGKG_H.jpg</filename>
+	<path>/object_detection/17SH7Ztr1-lb57f7kAlWYego2xqMGKG_H.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>380</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>car</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1</xmin>
+			<ymin>9</ymin>
+			<xmax>486</xmax>
+			<ymax>363</ymax>
+		</bndbox>
+	</object>
+</annotation>

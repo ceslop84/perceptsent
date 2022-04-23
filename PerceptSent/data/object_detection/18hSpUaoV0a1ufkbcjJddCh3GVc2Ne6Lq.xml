@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>18hSpUaoV0a1ufkbcjJddCh3GVc2Ne6Lq.jpg</filename>
+	<path>/object_detection/18hSpUaoV0a1ufkbcjJddCh3GVc2Ne6Lq.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>fan</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>42</xmin>
+			<ymin>43</ymin>
+			<xmax>607</xmax>
+			<ymax>605</ymax>
+		</bndbox>
+	</object>
+</annotation>

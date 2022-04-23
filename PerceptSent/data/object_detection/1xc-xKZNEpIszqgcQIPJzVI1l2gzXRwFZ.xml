@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1xc-xKZNEpIszqgcQIPJzVI1l2gzXRwFZ.jpg</filename>
+	<path>/object_detection/1xc-xKZNEpIszqgcQIPJzVI1l2gzXRwFZ.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>479</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>graffiti</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>36</xmin>
+			<ymin>133</ymin>
+			<xmax>640</xmax>
+			<ymax>278</ymax>
+		</bndbox>
+	</object>
+</annotation>

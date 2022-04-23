@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1-7jyBGXwwNh9rg6abZ6R58YsgiV0G7Le.jpg</filename>
+	<path>/object_detection/1-7jyBGXwwNh9rg6abZ6R58YsgiV0G7Le.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>306</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>weapon</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>6</xmin>
+			<ymin>9</ymin>
+			<xmax>429</xmax>
+			<ymax>306</ymax>
+		</bndbox>
+	</object>
+</annotation>

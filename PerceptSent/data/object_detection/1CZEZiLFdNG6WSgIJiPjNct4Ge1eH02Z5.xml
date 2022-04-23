@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>1CZEZiLFdNG6WSgIJiPjNct4Ge1eH02Z5.jpg</filename>
+	<path>/object_detection/1CZEZiLFdNG6WSgIJiPjNct4Ge1eH02Z5.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>360</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>sky</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>7</xmin>
+			<ymin>2</ymin>
+			<xmax>640</xmax>
+			<ymax>360</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,26 @@
+<annotation verified="yes">
+	<folder>object_detection</folder>
+	<filename>15bgzP0Mnss2uyIJZhWr4A6IPMs7kuKTv.jpg</filename>
+	<path>/object_detection/15bgzP0Mnss2uyIJZhWr4A6IPMs7kuKTv.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>335</width>
+		<height>500</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>birdhouse</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>81</xmin>
+			<ymin>83</ymin>
+			<xmax>250</xmax>
+			<ymax>277</ymax>
+		</bndbox>
+	</object>
+</annotation>
