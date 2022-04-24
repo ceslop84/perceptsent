@@ -40,8 +40,7 @@ class Dataset():
 
             eco = {'no_eco': 0, 'low': 1, 'middle': 2,  'high': 3}
 
-            edu = {
-                'no_edu': 0, 
+            edu = {'no_edu': 0, 
                 'lesssec': 1, 'ttv_edu': 1, 'sec_edu': 1, 
                 'Bachelor’s degree': 2, 'bac_edu': 2,
                 'Postgraduate': 3,  'pos_edu': 3
@@ -815,7 +814,6 @@ class Dataset():
                         "perceptions": image.get("perceptions", [])
                         }
 
-
         tasks = read_data(self.dataset_json)
         workers_info = get_workers_info(tasks)
         imgs = list()
@@ -1349,7 +1347,7 @@ class Dataset():
                 metadata[img_id] = [x + y for x, y in zip(metadata[img_id], img_m)]
                 perceptions[img_id] = [x + y for x, y in zip(perceptions[img_id], img_p)]
                 perceptions_agg.append(img_pa)
-                objects[img_id] = [x + y for x, y in zip(objects[img_id], img_o)]           
+                objects[img_id] = img_o        
 
         descriptors = list()
         if self.method == "individual" and self.perceptions == "aggregated":
@@ -1404,7 +1402,7 @@ class Dataset():
             objects_lb = list()
             o_labels = self.labels.get("objects", dict())
             for index, o in enumerate(img[3].get("objects", [])):
-                if o:
+                for _ in range(o):
                     objects_cd.append(index)
                     objects_lb.append(o_labels.get(index, ""))
                     
@@ -1458,21 +1456,21 @@ class Dataset():
         data_lb_t.append(["image", "worker", "data", "field"])
         for dd in data_lb[1:]:
             for i, d in enumerate(dd[2:10]):
-                if d is not None: data_lb_t.append([f"{dd[0]},{dd[1]}", d, data_lb[0][i+2]])
+                if d is not None: data_lb_t.append([dd[0], dd[1], d, data_lb[0][i+2]])
             for r in dd[10].split(','):
-                if r!='': data_lb_t.append([f"{dd[0]},{dd[1]}", r, "perceptions"])
+                if r!='': data_lb_t.append([dd[0], dd[1], r, "perceptions"])
             for r in dd[11].split(','):
-                if r!='': data_lb_t.append([f"{dd[0]},{dd[1]}", r, "objects"])
+                if r!='': data_lb_t.append([dd[0], dd[1], r, "objects"])
         
         data_cd_t = list()
         data_cd_t.append(["image", "worker", "data", "field"])
         for dd in data_cd[1:]:
             for i, d in enumerate(dd[2:10]):
-                if d is not None: data_cd_t.append([f"{dd[0]},{dd[1]}", d, data_cd[0][i+2]])
+                if d is not None: data_cd_t.append([dd[0],dd[1], d, data_cd[0][i+2]])
             for r in dd[10].split(','):
-                if r!='': data_cd_t.append([f"{dd[0]},{dd[1]}", r, "perceptions"])
+                if r!='': data_cd_t.append([dd[0], dd[1], r, "perceptions"])
             for r in dd[11].split(','):
-                if r!='': data_cd_t.append([f"{dd[0]},{dd[1]}", r, "objects"])
+                if r!='': data_cd_t.append([dd[0], dd[1], r, "objects"])
         
         with open(f'{self.dataset_folder}/raw_label_t.csv', 'w') as f:
             write = csv.writer(f, delimiter=';')

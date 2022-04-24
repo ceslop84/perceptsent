@@ -8,8 +8,8 @@ OUTPUT = "output"
 PROFILING = False
 FREEZE = False
 EARLY_STOP = False
-K = 5
-EPOCHS = 20
+K = 1
+EPOCHS = 1
 
 
 if __name__ == '__main__':
