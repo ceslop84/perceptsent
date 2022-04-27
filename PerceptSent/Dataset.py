@@ -739,7 +739,7 @@ class Dataset():
             return classes
 
         balance_count = get_classes_count(self.nr_classes)
-        for img in self.data:
+        for img in self.imgs_list:
             balance_count[f"{img[2]}"] += 1
         min = -1
         cls_min = ""
