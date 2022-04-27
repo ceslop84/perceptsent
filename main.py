@@ -22,9 +22,9 @@ if __name__ == '__main__':
             try:
                 dataset = Dataset(cfg, DATASET, OUTPUT, PROFILING)
                 dataset.create()
-                # neural_network = NeuralNetwork(dataset, FREEZE, EARLY_STOP)
-                # X, Y = neural_network.load_dataset()
-                # neural_network.train_model(X, Y, k=K, epochs=EPOCHS)
+                neural_network = NeuralNetwork(dataset, FREEZE, EARLY_STOP)
+                X, Y = neural_network.load_dataset()
+                neural_network.train_model(X, Y, k=K, epochs=EPOCHS)
             except Exception as e:
                 print(f"\n\n\nSorry, something went wrong in experiment {str(cfg[0])}: {e}\n\n\n")
                 with open(f"{OUTPUT}/log.txt", 'a+') as f:
