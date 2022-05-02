@@ -874,7 +874,7 @@ class Dataset():
                             cat = obj.text
                             cat_id = informations[desc_label].get(cat, -1)
                             if cat_id >0:
-                                desc_list[cat_id]+=1
+                                desc_list[cat_id]=1
                         att["objects"] = desc_list
                     else:
                         raise Exception("Unknown attribute!")

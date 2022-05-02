@@ -13,7 +13,6 @@ EPOCHS = 20
 
 
 if __name__ == '__main__':
-
     with open(INPUT, 'r') as e:
         lines = e.readlines()[1:]
         for line in lines:
@@ -31,6 +30,5 @@ if __name__ == '__main__':
                     f.write(str(e))
             else:
                 print(f"\n\nExperiment {str(cfg[0])} successfully completed!\n\n")
-       
     results = Results(K, EPOCHS, INPUT, OUTPUT)
     results.consolidate()
