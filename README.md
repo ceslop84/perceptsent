@@ -10,7 +10,7 @@ pip3 install -r requirements.txt
 ## How to Use
 
 ```
-Usage: python3 OutdoorSent -m model_name [-a attribute_dir [-n att_dim]] [-t images [-k k] | -e images | -c images]
+Usage: python3 main.py
 ```
 
 **Parameters:**

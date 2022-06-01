@@ -286,7 +286,7 @@ class NeuralNetwork:
         self.__unpack(X, Y, "imgs")
         return X, Y
 
-    def train_model(self, X_imgs, Y_labels, epochs=20, k=5):
+    def train_model(self, X_imgs, Y_labels, epochs=20, k=5, permutation=False):
 
         def save_model(file_name):
             with open(file_name, 'a+') as f:
@@ -315,10 +315,19 @@ class NeuralNetwork:
                     Y_val.append(Y_labels[k])
                 self.__fit_model(X_train, Y_train, epochs, early_stop=self.early_stop, w_folder=w_folder, name=f"{k}_{i+1}")
                 self.classify(X_val, Y_val, f"{k}_{i+1}")
+
+                if permutation:
+                    for p in range(0,self.dataset.n_atts):
+                        self.classify(X_val, Y_val, name=f'{k}_{i+1}_perm{p}', permutation=[p])
+
         elif k == 1:
             X_train, X_val, Y_train, Y_val = train_test_split(X_imgs, Y_labels, test_size = 0.2, stratify = y, random_state = 42)
             self.__fit_model(X_train, Y_train, epochs=epochs, early_stop=self.early_stop, w_folder=w_folder, name=f"{k}_1")
-            self.classify(X_val, Y_val, f"{k}_1")                
+            self.classify(X_val, Y_val, f"{k}_1")   
+
+            if permutation:
+                for p in range(0,self.dataset.n_atts):
+                    self.classify(X_val, Y_val, name=f'{k}_1_perm{p}', permutation=[p])             
 
     def __unpack(self, X, Y, file_name=None, classify=False):
         XY = list()
