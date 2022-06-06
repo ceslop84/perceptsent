@@ -19,7 +19,7 @@ from tensorflow.keras.applications.inception_v3 import preprocess_input as incep
 from tensorflow.keras.applications.xception import preprocess_input as xception_preprocess_input
 from tensorflow.keras.applications.densenet import preprocess_input as densenet_preprocess_input
 
-BATCH_SIZE = 32
+BATCH_SIZE = 16
 VERBOSE = 1
 
 class DataGenerator(Sequence):
@@ -130,29 +130,29 @@ class NeuralNetwork:
             self.model.load_weights(h5_file)
         self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
+    def add_dense_layers(self, input_tensor, x=None):
+        if self.model_name != 'none':
+            if self.dataset.attributes is not None:
+                    att_tensor = layers.Input(shape=(self.dataset.n_atts,), name='attributes')
+                    x = layers.Concatenate()([x, att_tensor])
+        else:
+            if self.dataset.attributes is not None:
+                    att_tensor = layers.Input(shape=(self.dataset.n_atts,), name='attributes')
+                    x = att_tensor
+        x = layers.Dense(2048, activation='relu')(x)
+        x = layers.Dropout(rate=0.2)(x)
+        x = layers.Dense(1024, activation='relu')(x)
+        x = layers.Dropout(rate=0.2)(x)
+        x = layers.Dense(24, activation='relu')(x)
+        x = layers.Dense(self.dataset.nr_classes, activation='softmax')(x)
+
+        if self.dataset.attributes is not None:
+            model = Model(inputs=[input_tensor, att_tensor], outputs=x)
+        else:
+            model = Model(inputs=[input_tensor], outputs=x)
+        return model
+
     def __load_model(self):
-
-        def add_dense_layers(network, input_tensor, x=None):
-            if network.model_name != 'none':
-                if network.dataset.attributes is not None:
-                        att_tensor = layers.Input(shape=(network.dataset.n_atts,), name='attributes')
-                        x = layers.Concatenate()([x, att_tensor])
-            else:
-                if network.dataset.attributes is not None:
-                        att_tensor = layers.Input(shape=(network.dataset.n_atts,), name='attributes')
-                        x = att_tensor
-            x = layers.Dense(2048, activation='relu')(x)
-            x = layers.Dropout(rate=0.2)(x)
-            x = layers.Dense(1024, activation='relu')(x)
-            x = layers.Dropout(rate=0.2)(x)
-            x = layers.Dense(24, activation='relu')(x)
-            x = layers.Dense(network.dataset.nr_classes, activation='softmax')(x)
-
-            if network.dataset.attributes is not None:
-                model = Model(inputs=[input_tensor, att_tensor], outputs=x)
-            else:
-                model = Model(inputs=[input_tensor], outputs=x)
-            return model
 
         def robust_model(input_tensor):
             # Robust Image Sentiment Analysis Using
@@ -248,9 +248,9 @@ class NeuralNetwork:
                 x = layers.Flatten(name="flatten")(next_layer)
                 self.classifier_layer_names = ["flatten"]
 
-            model = add_dense_layers(self, input_tensor, x)
+            model = self.add_dense_layers(input_tensor, x)
         else:
-            model = add_dense_layers(self, input_tensor)
+            model = self.add_dense_layers(input_tensor)
         
         return model
 

@@ -1,0 +1,2 @@
+num_seq;model;nr_classes;expand_neutral;shift_neutral;method;data_augmented;metadata;perceptions;object_detection;dataset_strategy;dataset_size;class_balance
+4;resnet;3;;;dominant3;;;;;;;

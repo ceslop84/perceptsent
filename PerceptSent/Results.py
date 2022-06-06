@@ -18,7 +18,7 @@ class Results():
         self.predict = csv.writer(self.predict_csv, delimiter=';')
 
         self.results.writerow([
-                            "id", "k", "epochs",
+                            "id", "file", "k", "epochs",
                             "nr_classes", "expand_neutral", "shift_neutral", "method", "data_augmented",
                             "descriptors", "filter", "class_balance", "include_no_data",
                             'Negative_id', 'SlightlyNegative_id', 'Neutral_id', 'SlightlyPositive_id', 'Positive_id',
@@ -131,7 +131,7 @@ class Results():
                 metrics_list.append(metrics[key]["0"])
 
             csv_writer.writerow([
-                                num_seq, k, epochs,
+                                num_seq, file_data.name, k, epochs,
                                 cfg.get("nr_classes",""), cfg.get("expand_neutral",""), cfg.get("shift_neutral",""), cfg.get("method",""), cfg.get("data_augmented",""), 
                                 cfg.get("descriptors",""), cfg.get("filter",""), cfg.get("class_balance",""), cfg.get("include_no_data",""),
                                 classes_dict.get("Negative",""), classes_dict.get("SlightlyNegative",""), classes_dict.get("Neutral",""), classes_dict.get("SlightlyPositive",""), classes_dict.get("Positive",""),

@@ -1,16 +1,18 @@
 from PerceptSent import NeuralNetwork
-from PerceptSent.Dataset import Dataset
-from PerceptSent.Results import Results
+from PerceptSent import HeatMap
+from PerceptSent import Dataset
+from PerceptSent import Results
+
 
 DATASET = "PerceptSent/data"
-INPUT = "experiments.csv"
-OUTPUT = "output"
+INPUT = "experiments_hm.csv"
+OUTPUT = "output_hm"
 PROFILING = False
 FREEZE = False
 EARLY_STOP = False
-PERMUTATION = True
-K = 5
-EPOCHS = 20
+PERMUTATION = False
+K = 1
+EPOCHS = 1
 
 
 if __name__ == '__main__':
@@ -20,11 +22,17 @@ if __name__ == '__main__':
             cfg = line.replace("\n", "").split(";")
             print(f"\n\n--- Executing experiment {str(cfg[0])} ---\n\n")
             try:
+
                 dataset = Dataset(cfg, DATASET, OUTPUT, PROFILING)
                 dataset.create()
                 neural_network = NeuralNetwork(dataset, FREEZE, EARLY_STOP)
                 X, Y = neural_network.load_dataset()
                 neural_network.train_model(X, Y, k=K, epochs=EPOCHS, permutation=PERMUTATION)
+
+                predict, result = neural_network.classify(X, Y, "heatmap")
+                heatmap = HeatMap(neural_network)
+                heatmap.make_heatmap(X, predict)
+
             except Exception as e:
                 print(f"\n\n\nSorry, something went wrong in experiment {str(cfg[0])}: {e}\n\n\n")
                 with open(f"{OUTPUT}/log.txt", 'a+') as f:
