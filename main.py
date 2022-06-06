@@ -40,5 +40,6 @@ if __name__ == '__main__':
                     f.write(str(e))
             else:
                 print(f"\n\nExperiment {str(cfg[0])} successfully completed!\n\n")
+    
     results = Results(K, EPOCHS, INPUT, OUTPUT)
     results.consolidate()
