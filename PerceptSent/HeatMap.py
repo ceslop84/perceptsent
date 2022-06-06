@@ -42,17 +42,12 @@ class HeatMap():
         i = max_index[0][0]
         return [i, self.neural_network.dataset.classes_list[i], predictions[i]]
 
-    def __create_heatmap(self, data_array):
-
-        # Processing input data.
-        img_array = np.expand_dims(data_array[0], axis=0)
-        if self.neural_network.dataset.attributes is not None:
-            att_array = np.expand_dims(data_array[1], axis=0)
+    def __create_heatmap_model(self):
 
         # First, we create a model that maps the input image to the activations
         # of the last conv layer
         last_conv_layer = self.neural_network.last_conv_layer
-        last_conv_layer_model = Model(self.neural_network.model.inputs, last_conv_layer.output)
+        self.__last_conv_layer_model = Model(self.neural_network.model.inputs, last_conv_layer.output)
 
         # Second, we create a model that maps the activations of the last conv
         # layer to the final class predictions
@@ -61,29 +56,35 @@ class HeatMap():
         for layer_name in self.neural_network.classifier_layer_names:
             x = self.neural_network.model.get_layer(layer_name)(x)
 
-        classifier_model = self.neural_network.add_dense_layers(input_tensor, x)
+        self.__classifier_model = self.neural_network.add_dense_layers(input_tensor, x)
+
+    def __generate_heatmap(self, data_array):
+
+        # Processing input data.
+        img_array = np.expand_dims(data_array[0], axis=0)
+        if self.neural_network.dataset.attributes is not None:
+            att_array = np.expand_dims(data_array[1], axis=0)
 
         # Then, we compute the gradient of the top predicted class for our input image
         # with respect to the activations of the last conv layer
         with tf.GradientTape() as tape:
             # Compute activations of the last conv layer and make the tape watch it
             if self.neural_network.dataset.attributes is not None:
-                last_conv_layer_output = last_conv_layer_model([img_array, att_array])
+                last_conv_layer_output = self.__last_conv_layer_model([img_array, att_array])
             else:
-                last_conv_layer_output = last_conv_layer_model(img_array)
+                last_conv_layer_output = self.__last_conv_layer_model(img_array)
             tape.watch(last_conv_layer_output)
             # Compute class predictions
             if self.neural_network.dataset.attributes is not None:
-                preds = classifier_model([last_conv_layer_output, att_array])
+                preds = self.__classifier_model([last_conv_layer_output, att_array])
             else:
-                preds = classifier_model(last_conv_layer_output)
+                preds = self.__classifier_model(last_conv_layer_output)
             top_pred_index = tf.argmax(preds[0])
             top_class_channel = preds[:, top_pred_index]
 
         # This is the gradient of the top predicted class with regard to
         # the output feature map of the last conv layer
         grads = tape.gradient(top_class_channel, last_conv_layer_output)
-
         # This is a vector where each entry is the mean intensity of the gradient
         # over a specific feature map channel
         pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
@@ -139,6 +140,9 @@ class HeatMap():
         self.__create_dir(f"{folder}/Heatmap")
         if n_images>len(images) or n_images<0:
             n_images = len(images)
+
+        self.__create_heatmap_model()
+
         for i in range(n_images):
             predicted = self.__decode_predictions(predictions[i])
 
@@ -153,8 +157,11 @@ class HeatMap():
             else:
                 X = [img]
 
-            # Generate class activation heatmap
-            heatmap = self.__create_heatmap(X)
+            try:
+                # Generate class activation heatmap
+                heatmap = self.__generate_heatmap(X)
+                # Save the heatmap fused with the input image.
+                self.__save_heatmap(img_path, predicted, heatmap, f"{folder}/Heatmap")
 
-            # Save the heatmap fused with the input image.
-            self.__save_heatmap(img_path, predicted, heatmap, f"{folder}/Heatmap")
+            except Exception as e_hm:
+                print(f"Error while generating heatmap from image {img_path}.")

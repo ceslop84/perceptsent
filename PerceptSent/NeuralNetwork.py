@@ -19,7 +19,7 @@ from tensorflow.keras.applications.inception_v3 import preprocess_input as incep
 from tensorflow.keras.applications.xception import preprocess_input as xception_preprocess_input
 from tensorflow.keras.applications.densenet import preprocess_input as densenet_preprocess_input
 
-BATCH_SIZE = 16
+BATCH_SIZE = 8
 VERBOSE = 1
 
 class DataGenerator(Sequence):

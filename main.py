@@ -16,6 +16,7 @@ EPOCHS = 1
 
 
 if __name__ == '__main__':
+
     with open(INPUT, 'r') as e:
         lines = e.readlines()[1:]
         for line in lines:
