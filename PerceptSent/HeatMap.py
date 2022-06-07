@@ -151,7 +151,7 @@ class HeatMap():
 
             if self.neural_network.dataset.attributes is not None:
                 name_ext = Path(img_path).name
-                att_path = self.neural_network.attributes +'/'+name_ext.split(".")[0]+'.txt'
+                att_path = self.neural_network.dataset.attributes +'/'+name_ext.split(".")[0]+'.txt'
                 att = np.loadtxt(att_path)
                 X = [img, att]
             else:

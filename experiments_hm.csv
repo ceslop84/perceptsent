@@ -1,2 +1,15 @@
 num_seq;model;nr_classes;expand_neutral;shift_neutral;method;data_augmented;metadata;perceptions;object_detection;dataset_strategy;dataset_size;class_balance
 4;resnet;3;;;dominant3;;;;;;;
+5;resnet;3;;;dominant4;;;;;;;
+6;resnet;3;;;dominant5;;;;;;;
+28;resnet;3;;;dominant3;;;aggregated;;;;
+29;resnet;3;;;dominant4;;;aggregated;;;;
+30;resnet;3;;;dominant5;;;aggregated;;;;
+52;resnet;3;;;dominant3;;;;true;;;
+53;resnet;3;;;dominant4;;;;true;;;
+54;resnet;3;;;dominant5;;;;true;;;
+74;resnet;3;;;individual;;individual;;;;;
+78;resnet;3;;;individual;;;individual;;;;
+82;resnet;3;;;individual;;individual;individual;;;;
+86;resnet;3;;;individual;;individual;aggregated;;;;
+90;resnet;3;;;individual;;individual;;true;;;
