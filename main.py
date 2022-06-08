@@ -13,7 +13,7 @@ FREEZE = False
 EARLY_STOP = False
 PERMUTATION = False
 K = 1
-EPOCHS = 1
+EPOCHS = 20
 
 
 if __name__ == '__main__':
