@@ -11,7 +11,7 @@ from PerceptSent import NeuralNetwork
 
 class HeatMap():
 
-    def __init__(self, neural_network):
+    def __init__(self, neural_network=None):
         self.neural_network = neural_network
 
     def __create_dir(self, dir):
@@ -25,15 +25,7 @@ class HeatMap():
             print(f"Creation of directory {dir} failed: {e}")
             exit(1)
 
-    def __decode_predictions(self, predictions):
-        # max_value = np.amax(predictions)
-        max_index = np.where(predictions==np.amax(predictions))
-        i = max_index[0][0]
-        return [i, self.neural_network.dataset.classes_list[i], predictions[i]]
-
-    def __save_heatmap(self, img_path, predicted, heatmap, folder):
-
-        class_name = predicted[1]
+    def __save_heatmap(self, img_path, true_value, predicted_value, heatmap, folder):
 
         # We load the original image
         img = image.load_img(img_path)
@@ -58,19 +50,19 @@ class HeatMap():
 
         # Save the superimposed image
         name_ext = Path(img_path).name
-        save_path = f"{folder}/{name_ext.split('.')[0]}_{class_name}.{name_ext.split('.')[1]}"
+        save_path = f"{folder}/{name_ext.split('.')[0]}_t-{true_value}_p-{predicted_value}.{name_ext.split('.')[1]}"
         superimposed_img.save(save_path)
 
-    def __create_heatmap(self, img_path, predicted, folder):
+    def __create_heatmap(self, img_path, true_value, predicted_value, folder):
         try:
             # Generate class activation heatmap
             heatmap = self.__make_gradcam_heatmap(img_path)
             # Save the heatmap fused with the input image.
-            self.__save_heatmap(img_path, predicted, heatmap, f"{folder}/Heatmap")
+            self.__save_heatmap(img_path, true_value, predicted_value, heatmap, f"{folder}/Heatmap")
         except Exception as e_hm:
             print(f"Error while generating heatmap from image {img_path}.")
 
-    def make_heatmap(self, images, predictions, images_list_file):
+    def make_heatmap(self, classification, images_list_file):
         
         images_list = list()
         with open(images_list_file, "r") as f:
@@ -80,62 +72,52 @@ class HeatMap():
 
         folder = self.neural_network.results_folder
         self.__create_dir(f"{folder}/Heatmap")
-        n_images = len(images)
 
-        for i in range(n_images):
-            img_name = images[i][0][2][:33]
+        for img in classification:
+            img_name = img[0].split('/')[-1][:33]
             if img_name not in images_list:
                 continue
-            predicted = self.__decode_predictions(predictions[i])
-            if len(images[i])==1:
-                img_path = f"{images[i][0][0]}/{images[i][0][2]}.jpg"
-                self.__create_heatmap(img_path, predicted, folder)
-            elif len(images[i])==5:
-                for j in range(5):
-                    img_path = f"{images[i][j][0]}/{images[i][j][2]}.jpg"
-                    self.__create_heatmap(img_path, predicted, folder)
+            self.__create_heatmap(img[0], img[3], img[4], folder)
 
-    def consolidate(self, input, output):
+    def consolidate(self, heatmap, input, output):
 
         def find(img_name, folder):
+            img_list = list()
             for _, _, files in os.walk(folder):
                 for f in files:
                     if img_name in f:
-                        if "Positive" in f:
-                            return f.replace("_Positive.jpg", ""), "Positive"
-                        elif "Negative" in f:
-                            return f.replace("_Negative.jpg", ""), "Negative"
-                        elif "Neutral" in f:
-                            return f.replace("_Neutral.jpg", ""), "Neutral"
-                        else:
-                            raise Exception()
-                return None, None
+                        rater_sent = f.replace(f"{img_name}", "")
+                        img_list.append([img_name, rater_sent])
+            return img_list
 
         exp_list = list()
         with open(input, 'r') as e:
                 lines = e.readlines()[1:]
                 for line in lines:
-                    exp_list.append(line[0])
+                    exp_list.append(line.split(';')[0])
 
-        out_folder = self.__create_dir(f"{output}/heatmap")
+        out_folder = self.__create_dir(f"{output}/heatmap_extract")
 
-        with open("output_hm/extract.csv", "r") as f:
+        img_list = list()
+        with open(heatmap, "r") as f:
             lines = f.readlines()
             for line in lines:
-                img_name = line.replace("\n", "")
-                self.__create_dir(f"{out_folder}/{img_name}")
-                for e in exp_list:
-                    folder = f"output_hm/{e}/results/Heatmap"
-                    file, sent = find(img_name, folder)
-                    if file:
-                        src = f"{folder}/{file}_{sent}.jpg"
-                        dst = f"{out_folder}/{img_name}/{e}_{sent}.jpg"
+                img_list.append(line.replace("\n", ""))
+        for img_name in img_list:
+            self.__create_dir(f"{out_folder}/{img_name}")
+            for e in exp_list:
+                folder = f"{output}/{e}/results/Heatmap"
+                files = find(img_name, folder)
+                if files:
+                    for f in files:
+                        src = f"{folder}/{f[0]}{f[1]}"
+                        dst = f"{out_folder}/{img_name}/{e}{f[1]}"
                         shutil.copyfile(src, dst)
-                    else:
+                else:
                         src = None
                         dst = Path(f"{out_folder}/{img_name}/{e}_ND.jpg")
                         dst.touch(exist_ok=True)
-                    del file, sent, folder, src, dst
+
 
     def __make_gradcam_heatmap(self, img_path):
 

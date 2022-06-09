@@ -452,9 +452,9 @@ class NeuralNetwork:
                 f.write("\n")
                 f.write(str(confusion_matrix(y_true, y_pred)))
                 f.write("\n")
-                result = list()
+                classification = list()
                 f.write("image, value, true_label, predict_label\n")
                 for img, p, c, t in zip(imgs, pred, y_pred, y_true):
                     f.write(f"{img}, {p}, {self.dataset.classes_list[t]}, {self.dataset.classes_list[c]}\n")
-                    result.append([img, p[0], p[1], self.dataset.classes_list[t], self.dataset.classes_list[c]])
-        return pred, result
+                    classification.append([img, p[0], p[1], self.dataset.classes_list[t], self.dataset.classes_list[c]])
+        return classification
