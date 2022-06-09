@@ -61,7 +61,16 @@ class HeatMap():
         save_path = f"{folder}/{name_ext.split('.')[0]}_{class_name}.{name_ext.split('.')[1]}"
         superimposed_img.save(save_path)
 
-    def make_heatmap(self, images, predictions, images_list_file, folder=None, n_images=-1):
+    def __create_heatmap(self, img_path, predicted, folder):
+        try:
+            # Generate class activation heatmap
+            heatmap = self.__make_gradcam_heatmap(img_path)
+            # Save the heatmap fused with the input image.
+            self.__save_heatmap(img_path, predicted, heatmap, f"{folder}/Heatmap")
+        except Exception as e_hm:
+            print(f"Error while generating heatmap from image {img_path}.")
+
+    def make_heatmap(self, images, predictions, images_list_file):
         
         images_list = list()
         with open(images_list_file, "r") as f:
@@ -69,27 +78,22 @@ class HeatMap():
             for line in lines:
                 images_list.append(line.replace("\n",""))
 
-        if folder is None:
-            folder = self.neural_network.results_folder
+        folder = self.neural_network.results_folder
         self.__create_dir(f"{folder}/Heatmap")
-        if n_images>len(images) or n_images<0:
-            n_images = len(images)
+        n_images = len(images)
 
         for i in range(n_images):
-
-            if images[i][0][2] not in images_list:
+            img_name = images[i][0][2][:33]
+            if img_name not in images_list:
                 continue
-
             predicted = self.__decode_predictions(predictions[i])
-            img_path = f"{images[i][0][0]}/{images[i][0][2]}.jpg"
-
-            try:
-                # Generate class activation heatmap
-                heatmap = self.__make_gradcam_heatmap(img_path)
-                # Save the heatmap fused with the input image.
-                self.__save_heatmap(img_path, predicted, heatmap, f"{folder}/Heatmap")
-            except Exception as e_hm:
-                print(f"Error while generating heatmap from image {img_path}.")
+            if len(images[i])==1:
+                img_path = f"{images[i][0][0]}/{images[i][0][2]}.jpg"
+                self.__create_heatmap(img_path, predicted, folder)
+            elif len(images[i])==5:
+                for j in range(5):
+                    img_path = f"{images[i][j][0]}/{images[i][j][2]}.jpg"
+                    self.__create_heatmap(img_path, predicted, folder)
 
     def consolidate(self, input, output):
 
@@ -136,10 +140,15 @@ class HeatMap():
     def __make_gradcam_heatmap(self, img_path):
 
         # Processing input data.
-        pred_index=None
         img = tf.keras.preprocessing.image.load_img(img_path, target_size=(224,224))
-        array = tf.keras.preprocessing.image.img_to_array(img)
-        img_array = np.expand_dims(array, axis=0)
+        img_array = tf.keras.preprocessing.image.img_to_array(img)
+        img_array = np.expand_dims(img_array, axis=0)
+
+        if self.neural_network.dataset.attributes is not None:
+            name_ext = Path(img_path).name
+            att_path = self.neural_network.dataset.attributes +'/'+name_ext.split(".")[0]+'.txt'
+            att = np.loadtxt(att_path)
+            att_array = np.expand_dims(att, axis=0)
 
         model = self.neural_network.model
         last_conv_layer_name = self.neural_network.last_conv_layer.name
@@ -153,9 +162,14 @@ class HeatMap():
         # Then, we compute the gradient of the top predicted class for our input image
         # with respect to the activations of the last conv layer
         with tf.GradientTape() as tape:
-            last_conv_layer_output, preds = grad_model(img_array)
-            if pred_index is None:
-                pred_index = tf.argmax(preds[0])
+
+            if self.neural_network.dataset.attributes is not None:
+                last_conv_layer_output, preds = grad_model([img_array, att_array])
+            else:
+                last_conv_layer_output, preds = grad_model(img_array)
+
+
+            pred_index = tf.argmax(preds[0])
             class_channel = preds[:, pred_index]
 
         # This is the gradient of the output neuron (top predicted or chosen)

@@ -43,8 +43,8 @@ if __name__ == '__main__':
             else:
                 print(f"\n\nExperiment {str(cfg[0])} successfully completed!\n\n") 
 
-    heatmap = HeatMap()
-    heatmap.consolidate(INPUT, OUTPUT)
+    #heatmap = HeatMap()
+    #heatmap.consolidate(INPUT, OUTPUT)
 
     results = Results(K, EPOCHS, INPUT, OUTPUT)
     results.consolidate()
