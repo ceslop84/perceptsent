@@ -15,15 +15,15 @@ class HeatMap():
         self.neural_network = neural_network
 
     def __create_dir(self, dir):
-
-        if os.path.isdir(dir):
-            shutil.rmtree(dir)
-        try:
-            os.mkdir(dir)
+        if not os.path.isdir(dir):
+                try:
+                    os.mkdir(dir)
+                    return dir
+                except Exception as e:
+                    print(f"Creation of directory {dir} failed: {e}")
+                    exit(1)
+        else:
             return dir
-        except Exception as e:
-            print(f"Creation of directory {dir} failed: {e}")
-            exit(1)
 
     def __save_heatmap(self, img_path, true_value, predicted_value, heatmap, folder):
 
@@ -94,7 +94,7 @@ class HeatMap():
         with open(input, 'r') as e:
                 lines = e.readlines()[1:]
                 for line in lines:
-                    exp_list.append(line.split(';')[0])
+                    exp_list.append([line.split(';')[0],line.split(';')[5]])
 
         out_folder = self.__create_dir(f"{output}/heatmap_extract")
 
@@ -104,20 +104,20 @@ class HeatMap():
             for line in lines:
                 img_list.append(line.replace("\n", ""))
         for img_name in img_list:
-            self.__create_dir(f"{out_folder}/{img_name}")
+            dst_folder = self.__create_dir(f"{out_folder}/{img_name}")
             for e in exp_list:
-                folder = f"{output}/{e}/results/Heatmap"
+                dst_folder = self.__create_dir(f"{out_folder}/{img_name}/{e[1]}")
+                folder = f"{output}/{e[0]}/results/Heatmap"
                 files = find(img_name, folder)
                 if files:
                     for f in files:
                         src = f"{folder}/{f[0]}{f[1]}"
-                        dst = f"{out_folder}/{img_name}/{e}{f[1]}"
+                        dst = f"{dst_folder}/{e[0]}{f[1]}"
                         shutil.copyfile(src, dst)
                 else:
                         src = None
-                        dst = Path(f"{out_folder}/{img_name}/{e}_ND.jpg")
+                        dst = Path(f"{dst_folder}/{e[0]}_ND.jpg")
                         dst.touch(exist_ok=True)
-
 
     def __make_gradcam_heatmap(self, img_path):
 
