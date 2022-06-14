@@ -129,6 +129,7 @@ dmypy.json
 .pyre/
 
 # Custom PerceptSent
+/output*
 /output
 /output_temp
 /output_hm

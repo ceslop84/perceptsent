@@ -44,14 +44,27 @@ class HeatMap():
         jet_heatmap = jet_heatmap.resize((img_array.shape[1], img_array.shape[0]))
         jet_heatmap = image.img_to_array(jet_heatmap)
 
-        # Superimpose the heatmap on original image
-        superimposed_img = jet_heatmap * 0.4 + img_array
-        superimposed_img = image.array_to_img(superimposed_img)
-
-        # Save the superimposed image
         name_ext = Path(img_path).name
+
+        # Heatmap on original image
+        heatmap_img = jet_heatmap
+        heatmap_img = image.array_to_img(heatmap_img)
+        hm_save_path = f"{folder}/{name_ext.split('.')[0]}_hm_t-{true_value}_p-{predicted_value}.{name_ext.split('.')[1]}"
+        heatmap_img.save(hm_save_path)
+
+        # Original image
+        org_img = img_array
+        org_img = image.array_to_img(org_img)
+        org_save_path = f"{folder}/{name_ext.split('.')[0]}_org_t-{true_value}_p-{predicted_value}.{name_ext.split('.')[1]}"
+        org_img.save(org_save_path)
+
+        # Superimpose the heatmap on original image
+        superimposed_img = jet_heatmap * 0.5 + img_array
+        superimposed_img = image.array_to_img(superimposed_img)
         save_path = f"{folder}/{name_ext.split('.')[0]}_t-{true_value}_p-{predicted_value}.{name_ext.split('.')[1]}"
         superimposed_img.save(save_path)
+
+
 
     def __create_heatmap(self, img_path, true_value, predicted_value, folder):
         try:
