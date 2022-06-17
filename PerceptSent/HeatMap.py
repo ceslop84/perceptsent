@@ -6,7 +6,6 @@ from tensorflow.keras import Model, Input, layers
 from tensorflow.keras.preprocessing import image
 import matplotlib.cm as cm
 import shutil
-from PerceptSent import NeuralNetwork
 
 class HeatMap():
 

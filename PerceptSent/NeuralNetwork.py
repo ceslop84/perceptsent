@@ -5,7 +5,6 @@ import numpy as np
 
 from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
-from sklearn.preprocessing import MinMaxScaler
 
 import tensorflow as tf
 from tensorflow.keras import layers
