@@ -29,12 +29,16 @@ if __name__ == '__main__':
                 dataset.create()
                 neural_network = NeuralNetwork(dataset, FREEZE, EARLY_STOP)
                 X, Y = neural_network.load_dataset()
-                neural_network.train_model(X, Y, k=K, epochs=EPOCHS, permutation=PERMUTATION)
 
                 if HEATMAP:
-                    classification = neural_network.classify(X, Y, "heatmap")
-                    heatmap = HeatMap(neural_network)
-                    heatmap.make_heatmap(classification, HEATMAP)
+                    heatmap = HeatMap(neural_network, HEATMAP)
+                    X_train, Y_train, X_hm, Y_hm = heatmap.split_data(X, Y)
+                    neural_network.train_model(X_train, Y_train, k=K, epochs=EPOCHS, permutation=PERMUTATION)
+                    classification = neural_network.classify(X_hm, Y_hm, "heatmap")
+                    heatmap.make_heatmap(classification)
+                else:
+                    neural_network.train_model(X, Y, k=K, epochs=EPOCHS, permutation=PERMUTATION)
+
 
             except Exception as e:
                 print(f"\n\n\nSorry, something went wrong in experiment {str(cfg[0])}: {e}\n\n\n")

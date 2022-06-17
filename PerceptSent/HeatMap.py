@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-import cv2
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras import Model, Input, layers
@@ -11,8 +10,15 @@ from PerceptSent import NeuralNetwork
 
 class HeatMap():
 
-    def __init__(self, neural_network=None):
+    def __init__(self, neural_network=None, images_list_file=None):
         self.neural_network = neural_network
+        images_list = list()
+        if images_list_file:
+            with open(images_list_file, "r") as f:
+                lines = f.readlines()
+                for line in lines:
+                    images_list.append(line.replace("\n",""))
+        self.__heatmap_list = images_list
 
     def __create_dir(self, dir):
         if not os.path.isdir(dir):
@@ -64,8 +70,6 @@ class HeatMap():
         save_path = f"{folder}/{name_ext.split('.')[0]}_t-{true_value}_p-{predicted_value}.{name_ext.split('.')[1]}"
         superimposed_img.save(save_path)
 
-
-
     def __create_heatmap(self, img_path, true_value, predicted_value, folder):
         try:
             # Generate class activation heatmap
@@ -73,22 +77,31 @@ class HeatMap():
             # Save the heatmap fused with the input image.
             self.__save_heatmap(img_path, true_value, predicted_value, heatmap, f"{folder}/Heatmap")
         except Exception as e_hm:
-            print(f"Error while generating heatmap from image {img_path}.")
+            print(f"Error while generating heatmap from image {img_path}.")       
 
-    def make_heatmap(self, classification, images_list_file):
+    def split_data(self, X, Y):
+        X_train = list()
+        Y_train = list()
+        X_hm = list()
+        Y_hm = list()
+        for img in zip(X, Y):
+            img_name = img[0][0][2]
+            if img_name in self.__heatmap_list:
+                X_hm.append(img[0])
+                Y_hm.append(img[1])
+            else:
+                X_train.append(img[0])
+                Y_train.append(img[1])  
+        return X_train, Y_train, X_hm, Y_hm
+
+    def make_heatmap(self, classification):
         
-        images_list = list()
-        with open(images_list_file, "r") as f:
-            lines = f.readlines()
-            for line in lines:
-                images_list.append(line.replace("\n",""))
-
         folder = self.neural_network.results_folder
         self.__create_dir(f"{folder}/Heatmap")
 
         for img in classification:
             img_name = img[0].split('/')[-1][:33]
-            if img_name not in images_list:
+            if img_name not in self.__heatmap_list:
                 continue
             self.__create_heatmap(img[0], img[3], img[4], folder)
 
