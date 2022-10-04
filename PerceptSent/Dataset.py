@@ -785,11 +785,11 @@ class Dataset():
         def get_workers_info(tasks):
             workers_info = list()
             workers_list = list()
-            keys=["worker_id", "info_resp"]
+            keys=["worker_id", "worker_info"]
             for assgn in tasks:
                 worker_id = assgn.get('worker_id')
                 if not worker_id in workers_list:
-                    worker_info = [x for x in tasks if x["worker_id"] == worker_id and x["info_resp"]]
+                    worker_info = [x for x in tasks if x["worker_id"] == worker_id and x["worker_info"]]
                     if worker_info:
                         workers_info.append(dict(zip(keys, list(map(worker_info[0].get, keys)))))
                         workers_list.append(worker_id)
@@ -797,9 +797,9 @@ class Dataset():
 
         def get_info_resp(assgn, image, workers_info):
             worker_id = assgn.get('worker_id')
-            worker_info = [x for x in workers_info if x["worker_id"] == worker_id and x["info_resp"]]
+            worker_info = [x for x in workers_info if x["worker_id"] == worker_id and x["worker_info"]]
             if worker_info:
-                data = worker_info[0].get("info_resp")
+                data = worker_info[0].get("worker_info")
                 data["perceptions"] = image.get("perceptions", [])
                 return data
             else:
@@ -831,7 +831,7 @@ class Dataset():
         self.n_atts = n_atts
 
         for assgn in tasks:
-            image_resps = assgn.get('image_resps')  
+            image_resps = assgn.get('images')  
             for image in image_resps:
                 record = list()
                 record.append(image.get('id'))
