@@ -596,7 +596,7 @@ class Dataset():
                 raise Exception("Erro while processing the classes dictionary.")
             return classes_dict, classes_list
     
-        num_seq = int(cfg[0])
+        num_seq = str(cfg[0])
         model = cfg[1]
         nr_classes = int(cfg[2])
         expand_neutral = (cfg[3].lower()=="true")

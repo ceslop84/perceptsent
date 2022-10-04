@@ -9,7 +9,6 @@ num_seq;model;nr_classes;expand_neutral;shift_neutral;method;data_augmented;meta
 53;resnet;3;;;dominant4;;;;true;;;
 54;resnet;3;;;dominant5;;;;true;;;
 74;resnet;3;;;individual;;individual;;;;;
-78;resnet;3;;;individual;;;individual;;;;
 82;resnet;3;;;individual;;individual;individual;;;;
 86;resnet;3;;;individual;;individual;aggregated;;;;
 90;resnet;3;;;individual;;individual;;true;;;

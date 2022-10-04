@@ -282,7 +282,7 @@ class NeuralNetwork:
                 Y_labels.append(labels)
         X = np.asarray(X_imgs)
         Y = np.asarray(Y_labels)
-        self.__unpack(X, Y, "imgs")
+        self.unpack(X, Y, "imgs")
         return X, Y
 
     def train_model(self, X_imgs, Y_labels, epochs=20, k=5, permutation=False):
@@ -328,7 +328,7 @@ class NeuralNetwork:
                 for p in range(0,self.dataset.n_atts):
                     self.classify(X_val, Y_val, name=f'{k}_1_perm{p}', permutation=[p])             
 
-    def __unpack(self, X, Y, file_name=None, classify=False):
+    def unpack(self, X, Y, file_name=None, classify=False):
         XY = list()
 
         for imgs, labels in zip(X, Y):
@@ -382,8 +382,8 @@ class NeuralNetwork:
 
         y = [sum(y) for y in Y_labels]
         X_train, X_val, Y_train, Y_val = train_test_split(X_imgs, Y_labels, stratify = y, test_size = 0.2, random_state = 42)
-        Xt, Yt = self.__unpack(X_train, Y_train, f"imgs_train_{name}")
-        Xv, Yv = self.__unpack(X_val, Y_val, f"imgs_val_{name}")
+        Xt, Yt = self.unpack(X_train, Y_train, f"imgs_train_{name}")
+        Xv, Yv = self.unpack(X_val, Y_val, f"imgs_val_{name}")
         class_weight = weights(np.asarray(Yt))
         train_datagen = DataGenerator(Xt, Yt,
                                       att_dir = self.dataset.attributes,
@@ -430,7 +430,7 @@ class NeuralNetwork:
     def classify(self, X_imgs, Y_labels, name="classify", unpack=True, permutation=None):
         
         if unpack:
-            imgs, y_true = self.__unpack(X_imgs, Y_labels, name, True)
+            imgs, y_true = self.unpack(X_imgs, Y_labels, name, True)
         else:
             imgs = X_imgs
             y_true = Y_labels
