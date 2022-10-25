@@ -6,7 +6,7 @@ git clone https://github.com/ceslop84/perceptsent
 conda create --name py37_os python=3.7
 conda activate py37_os
 pip3 install -r requirements.txt
-pip install --upgrade --no-cache-dir gdown
+pip3 install --upgrade --no-cache-dir gdown
 ```
 ## How to Use
 
