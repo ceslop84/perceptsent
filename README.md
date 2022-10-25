@@ -11,7 +11,9 @@ pip install --upgrade --no-cache-dir gdown
 ## How to Use
 
 ```
-Usage: python3 main.py
+Run code samples: python3 main.py
+
+Download the dataset: python 3 Dataset/download_images.py
 ```
 
 ## Abstract
