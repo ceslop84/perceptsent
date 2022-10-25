@@ -134,5 +134,5 @@ dmypy.json
 /output_temp
 /output_hm
 /output_perm
-/PerceptSent/data/images/dominant/data_augmented
-/PerceptSent/data/images/individual/data_augmented
+/PerceptSent/data/images/
+*.jpg
