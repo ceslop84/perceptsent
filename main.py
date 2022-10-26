@@ -5,8 +5,8 @@ from PerceptSent import Results
 
 
 DATASET = "PerceptSent/data"
-HEATMAP = None
-INPUT = "experiments.csv"
+HEATMAP = None #"csv/heatmap_extract.csv"
+INPUT = "csv/experiments.csv" #"csv/experiments_hm.csv" "csv/experiments_perm.csv"
 OUTPUT = "output"
 PROFILING = False
 FREEZE = False
