@@ -6,11 +6,14 @@ git clone https://github.com/ceslop84/perceptsent
 conda create --name py37_os python=3.7
 conda activate py37_os
 pip3 install -r requirements.txt
+pip3 install --upgrade --no-cache-dir gdown
 ```
 ## How to Use
 
 ```
-Usage: python3 main.py
+Run code samples: python3 main.py
+
+Download the dataset: python 3 Dataset/download_images.py
 ```
 
 ## Abstract
