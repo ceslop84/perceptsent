@@ -1,21 +1,5 @@
 # PerceptSent
 
-## Installation
-```
-git clone https://github.com/ceslop84/perceptsent
-conda create --name py37_os python=3.7
-conda activate py37_os
-pip3 install -r requirements.txt
-pip3 install --upgrade --no-cache-dir gdown
-```
-## How to Use
-
-```
-Run code samples: python3 main.py
-
-Download the dataset: python 3 Dataset/download_images.py
-```
-
 ## Abstract
 
 Visual sentiment analysis is a challenging problem. Many datasets and approaches have been designed to foster breakthroughs in this trending research topic. However, most works scrutinize basic visual attributes from images, paying less attention to the viewers’ perceptions. 
@@ -27,9 +11,21 @@ Deep architectures and different problem formulations are explored using our dat
 
 **Keywords**: visual sentiment analysis; subjective perception; deep networks; novel dataset.
 
-## PerceptSent Dataset
+## Installation
+```
+git clone https://github.com/ceslop84/perceptsent
+conda create --name py37_os python=3.7
+conda activate py37_os
+pip3 install -r requirements.txt
+```
+## How to Use
 
-To download the dataset, please verify the folder **"Dataset"**.
+```
+Run code samples: python3 main.py
+
+Download the dataset: python3 Dataset/download.py
+```
+For more details regarding how to download the dataset, please verify the folder **"Dataset"**.
 
 ## Supplementary material
 
