@@ -21,9 +21,8 @@ pip3 install -r requirements.txt
 ## How to Use
 
 ```
-Run code samples: python3 main.py
+python3 main.py
 
-Download the dataset: python3 Dataset/download.py
 ```
 For more details regarding how to download the dataset, please verify the folder **"Dataset"**.
 

@@ -5,5 +5,3 @@ tensorflow-gpu
 Keras
 torch
 torchvision
-pandas
-pip3 install --upgrade --no-cache-dir gdown
