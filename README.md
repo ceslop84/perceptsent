@@ -21,8 +21,9 @@ pip3 install -r requirements.txt
 
 ## Download dataset
 
+```
 For more details regarding how to download the dataset, please verify the folder **"Dataset"**
-
+```
 
 ## How to Use
 
@@ -30,7 +31,6 @@ For more details regarding how to download the dataset, please verify the folder
 python3 main.py
 
 ```
-.
 
 ## Supplementary material
 
