@@ -27,14 +27,16 @@ Deep architectures and different problem formulations are explored using our dat
 
 **Keywords**: visual sentiment analysis; subjective perception; deep networks; novel dataset.
 
-## Supplementary material
-
-To verify the supplementary material, please check the folder **"Results"**.
-
 ## PerceptSent Dataset
 
 To download the dataset, please verify the folder **"Dataset"**.
 
-## Model Weights
+## Supplementary material
+
+### Results datasheet
+
+To verify the results datasheet, please check the folder **"Results"**.
+
+### Model Weights
 
 To download the model weights for each execution, please download [here](rerere).
