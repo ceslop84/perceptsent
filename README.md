@@ -35,4 +35,4 @@ To verify the results datasheet, please check the folder **"Results"**.
 
 ### Model Weights
 
-To download the model weights for each execution, please download [here](rerere).
+To download the model weights for each execution, please download [here](https://drive.google.com/file/d/1DGi2GePXJHb9XP2WRj6BzidCJCQCRBd4/view?usp=sharing).
