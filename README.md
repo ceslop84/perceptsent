@@ -18,13 +18,19 @@ conda create --name py37_os python=3.7
 conda activate py37_os
 pip3 install -r requirements.txt
 ```
+
+## Download dataset
+
+For more details regarding how to download the dataset, please verify the folder **"Dataset"**
+
+
 ## How to Use
 
 ```
 python3 main.py
 
 ```
-For more details regarding how to download the dataset, please verify the folder **"Dataset"**.
+.
 
 ## Supplementary material
 
