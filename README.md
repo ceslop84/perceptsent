@@ -31,6 +31,10 @@ Deep architectures and different problem formulations are explored using our dat
 
 To verify the supplementary material, please check the folder **"Results"**.
 
+## PerceptSent Dataset
+
+To download the dataset, please verify the folder **"Dataset"**.
+
 ## Model Weights
 
 To download the model weights for each execution, please download [here](rerere).
