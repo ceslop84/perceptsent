@@ -25,8 +25,12 @@ Aiming to fill this gap, we present PerceptSent, a novel dataset for visual sent
 Deep architectures and different problem formulations are explored using our dataset to combine visual and extra attributes for automatic sentiment analysis. We show evidence that evaluator’s perceptions, when correctly employed, are crucial in visual sentiment analysis, capable of improving accuracy and F-score performance in 30%, in average, reaching an impressive rate of
 97.00% and 96.80%, respectively. Although at this point, we do not have automatic approaches to capture these perceptions, our results open up new investigation avenues. 
 
-To verify the **supplementary data**, please check the folder **"Results"**.
+**Keywords**: visual sentiment analysis; subjective perception; deep networks; novel dataset.
+
+## Supplementary material
+
+To verify the supplementary material, please check the folder **"Results"**.
+
+## Model Weights
 
 To download the model weights for each execution, please download [here](rerere).
-
-**Keywords**: visual sentiment analysis; subjective perception; deep networks; novel dataset.
