@@ -2,14 +2,20 @@
 
 ## Abstract
 
-Visual sentiment analysis is a challenging problem. Many datasets and approaches have been designed to foster breakthroughs in this trending research topic. However, most works scrutinize basic visual attributes from images, paying less attention to the viewers’ perceptions. 
+Visual sentiment analysis is a challenging problem. Many datasets and approaches have been designed to foster breakthroughs in this trending research topic. However, most works scrutinize only subsymbolic models through visual attributes of the evaluated images, paying less attention to the subjectivity of viewers' perceptions as a basis for neuro-symbolic systems. 
 
-Aiming to fill this gap, we present PerceptSent, a novel dataset for visual sentiment analysis that spans 5,000 images shared by users on social networks. Besides the sentiment opinion (positive, slightly positive, neutral, slightly negative, negative) expressed by every evaluator about each image analyzed, the dataset contains evaluator’s metadata (age, gender, socioeconomic status, education, and psychological hints) as well as subjective perceptions observed by the evaluator about the image — such as the presence of nature, violence, lack of maintenance, etc. 
+Aiming to fill this gap, we present PerceptSent, a novel dataset for visual sentiment analysis that spans 5,000 images shared by users on social networks. Besides the sentiment opinion (positive, slightly positive, neutral, slightly negative, negative) expressed by every evaluator about each image analyzed, the dataset contains evaluator's metadata (age, gender, socioeconomic status, education, and psychological hints) as well as perceptions observed by the evaluator about the image — such as the presence of nature, violence, lack of maintenance, etc. 
 
-Deep architectures and different problem formulations are explored using our dataset to combine visual and extra attributes for automatic sentiment analysis. We show evidence that evaluator’s perceptions, when correctly employed, are crucial in visual sentiment analysis, capable of improving accuracy and F-score performance in 30%, in average, reaching an impressive rate of
-97.00% and 96.80%, respectively. Although at this point, we do not have automatic approaches to capture these perceptions, our results open up new investigation avenues. 
+Deep architectures and different problem formulations are explored using our dataset to combine visual and extra attributes (external knowledge) for automatic sentiment analysis. We show evidence that evaluator's perceptionss, when correctly employed, are crucial in visual sentiment analysis, improving the F-score performance from 61% to an impressive rate above 97%. Although, at this point, we do not have automatic approaches to capture these perceptions, our results open up new investigation avenues.
 
 **Keywords**: visual sentiment analysis; subjective perception; deep networks; novel dataset.
+
+## Publication
+
+C. Lopes, R. Minetto, M. Delgado and T. Silva, "PerceptSent - Exploring Subjectivity in a Novel Dataset for Visual Sentiment Analysis" in IEEE Transactions on Affective Computing, vol. , no. 01, pp. 1-15, 5555.
+doi: 10.1109/TAFFC.2022.3225238
+
+url: https://doi.ieeecomputersociety.org/10.1109/TAFFC.2022.3225238
 
 ## Installation
 ```
